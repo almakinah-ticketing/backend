@@ -10,5 +10,8 @@ Rails.application.routes.draw do
   end
   resources :attendees
   resources :admins
+  resources :events
+  resources :types
+  resources :tickets
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
