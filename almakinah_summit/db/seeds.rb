@@ -26,7 +26,7 @@
         name: Faker::Color.color_name
     });
     Event.create({
-        Title: Faker::Company.name,
+        title: Faker::Company.name,
         overview: Faker::Lorem.sentences,
         agenda: Faker::Lorem.paragraph,
         event_date:Faker::Date.forward(23),
