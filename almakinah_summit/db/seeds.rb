@@ -26,7 +26,7 @@
         name: Faker::Color.color_name
     });
     Event.create({
-        Title: Faker::Company.name,
+        title: Faker::Company.name,
         overview: Faker::Lorem.sentences,
         agenda: Faker::Lorem.paragraph,
         event_date:Faker::Date.forward(23),
@@ -34,9 +34,11 @@
         category_id: Faker::Number.between(1, 5),
         img: Faker::LoremPixel.image
     });
-    # Ticket.create({
-    #     name:
-    # });
+    Ticket.create({
+        attendee_id: Faker::Number.between(1, 5),
+        type_id: Faker::Number.between(1, 5),
+        event_id:Faker::Number.between(1, 5)
+    });
     Type.create({
         name: Faker::Company.type,
         price: Faker::Number.positive,
@@ -45,3 +47,10 @@
         event_id: Faker::Number.between(1, 5)
     });
 end
+# 50.times do
+#     Ticket.create({
+#         attendee_id: Faker::Number.between(1, 5),
+#         type_id: Faker::Number.between(1, 5),
+#         event_id:Faker::Number.between(1, 5)
+#     })
+# end

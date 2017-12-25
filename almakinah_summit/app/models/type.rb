@@ -3,5 +3,5 @@ class Type < ApplicationRecord
   validates :name, presence: true
   validates :price, presence: true
   validates :capacity, presence: true
-  has_many :events, dependent: :destroy
+  has_many :tickets, dependent: :destroy
 end
