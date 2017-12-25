@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  before_action :set_event, only: [:show, :update, :destroy]
+  before_action :set_event, only: [:show, :update, :destroy, :gethot]
   # GET /events
   def index
     @events = Event.order('event_date ASC');
@@ -8,7 +8,10 @@ class EventsController < ApplicationController
 
   # GET /events/1
   def show
-    render json: @event
+    count = @event.tickets_count
+    available = @event.tickets_available
+    types = @event.tickets_type
+    render json: {status: 'SUCCESS', tickets_available: available,tickets_sold: count , data:@event.as_json(include: {types: {only: [:name, :capacity]}})},status: :ok
   end
 
   # POST /events
@@ -36,10 +39,7 @@ class EventsController < ApplicationController
     @event.destroy
   end
 
-  def gethot
-    @event = Event..where(:category_id => '4').first
-  end
-  private
+   private
     # Use callbacks to share common setup or constraints between actions.
     def set_event
       @event = Event.find(params[:id])
