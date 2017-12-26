@@ -11,14 +11,15 @@ class EventsController < ApplicationController
     count = @event.tickets_count
     available = @event.tickets_available
     category = @event.get_category
-    typeTickets = @event.tickets_type
+    typeTicketsavailable = @event.tickets_type
+
     display = {
       status: 'SUCCESS',
       category: category,
       tickets_available: available,
       tickets_sold: count,
-      types_tickets: typeTickets,
-      data:@event.as_json(include: {types: {only: [:name, :capacity]}})
+      data:@event.as_json(include: {types: {only: [:name, :capacity]}}),
+      tickets_available_per_type: typeTicketsavailable
     }
     render json: display
   end
