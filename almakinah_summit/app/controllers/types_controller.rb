@@ -3,9 +3,9 @@ class TypesController < ApplicationController
 
   # GET /types
   def index
-    @types = Type.all
+    # @types = Type.all
 
-    render json: @types
+    # render json: @types
   end
 
   # GET /types/1

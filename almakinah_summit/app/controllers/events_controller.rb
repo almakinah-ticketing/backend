@@ -2,22 +2,33 @@ class EventsController < ApplicationController
   before_action :set_event, only: [:show, :update, :destroy]
   # GET /events
   def index
-    @events = Event.order('event_date ASC');
-    render json:@events
+    @events = Event.order('start_datetime ASC');
+    display = []
+    @events.each do |event| 
+      hash = event.as_json(
+        include: {types: {only: [:name, :capacity]}, category: {only: [:id, :name]}},
+        except: [:category_id]
+        )
+      display << hash;
+    end
+    render json: display
   end
 
   # GET /events/1
+  # Look into rendering this all as one object, perhaps using .to_json
   def show
     count = @event.tickets_count
     available = @event.tickets_available
     category = @event.get_category
     typeTickets = @event.tickets_type
+    duration = @event.duration
     display = {
       status: 'SUCCESS',
       category: category,
       tickets_available: available,
       tickets_sold: count,
       types_tickets: typeTickets,
+      duration: @event.duration,
       data:@event.as_json(include: {types: {only: [:name, :capacity]}})
     }
     render json: display
