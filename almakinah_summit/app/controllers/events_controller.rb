@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  before_action :set_event, only: [:show, :update, :destroy, :gethot]
+  before_action :set_event, only: [:show, :update, :destroy]
   # GET /events
   def index
     @events = Event.order('event_date ASC');
@@ -10,8 +10,17 @@ class EventsController < ApplicationController
   def show
     count = @event.tickets_count
     available = @event.tickets_available
-    types = @event.tickets_type
-    render json: {status: 'SUCCESS', tickets_available: available,tickets_sold: count , data:@event.as_json(include: {types: {only: [:name, :capacity]}})},status: :ok
+    category = @event.get_category
+    typeTickets = @event.tickets_type
+    display = {
+      status: 'SUCCESS',
+      category: category,
+      tickets_available: available,
+      tickets_sold: count,
+      types_tickets: typeTickets,
+      data:@event.as_json(include: {types: {only: [:name, :capacity]}})
+    }
+    render json: display
   end
 
   # POST /events
