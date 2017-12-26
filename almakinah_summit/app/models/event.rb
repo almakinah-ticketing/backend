@@ -23,9 +23,16 @@ class Event < ApplicationRecord
     final_count = original_tickets - sold_tickets
   end
 
-  #tickets per type
+  # tickets per type
   def tickets_type
-    self.types.select(:name, :capacity)
+    # self.types.where(:capacity)
+    current_capacity = self.types.find('2').name
+    types_array = self.types.ids
+  end
+
+  #events category
+  def get_category
+    current_category = self.category.name
   end
 
 
