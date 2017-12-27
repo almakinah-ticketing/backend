@@ -3,9 +3,8 @@ class TypesController < ApplicationController
 
   # GET /types
   def index
-    # @types = Type.all
-
-    # render json: @types
+    @types = Type.find(params[:event_id])
+    render json: @types
   end
 
   # GET /types/1
