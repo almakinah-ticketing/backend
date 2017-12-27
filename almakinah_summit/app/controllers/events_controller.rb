@@ -20,20 +20,22 @@ class EventsController < ApplicationController
     count = @event.tickets_count
     available = @event.tickets_available
     category = @event.get_category
-    typeTickets = @event.tickets_type
-    duration = @event.duration
+    typeTicketsavailable = @event.tickets_type
     display = {
       status: 'SUCCESS',
       category: category,
       tickets_available: available,
       tickets_sold: count,
-      types_tickets: typeTickets,
-      duration: @event.duration,
-      data:@event.as_json(include: {types: {only: [:name, :capacity]}})
+      data:@event.as_json(include: {types: {only: [:name, :capacity]}}),
+      tickets_available_per_type: typeTicketsavailable
     }
     render json: display
   end
-
+  #hottest event
+  def hot
+    render json: 'hamada'
+    
+  end
   # POST /events
   def create
     @event = Event.new(event_params)
