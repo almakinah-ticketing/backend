@@ -2,8 +2,8 @@ class Event < ApplicationRecord
   belongs_to :category
   validates :title, presence: true
   validates :overview, presence: true
-  validates :event_date, presence: true
-  validates :duration, presence: true
+  validates :start_datetime, presence: true
+  validates :end_datetime, presence: true
   has_many :types, dependent: :destroy
   has_many :tickets, dependent: :destroy
 
@@ -35,5 +35,20 @@ class Event < ApplicationRecord
     current_category = self.category.name
   end
 
+  # calculate duration based on start and end datetimes
+  def duration
+    self.end_datetime - self.start_datetime    
+  end
 
+  # # Look into overriding default as_json implementation to return virtual attributes
+  # def as_json(options = { })
+  #   h = super(options)
+  #   h[:finished]   = finished_items
+  #   h[:unfinished] = unfinished_items
+  #   h
+  # end
+
+  # def as_json(virtual_attributes, options={})
+  #     super.as_json(options).merge({virtual_attributes})
+  # end
 end
