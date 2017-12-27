@@ -28,7 +28,7 @@
     Event.create({
         title: Faker::Company.name,
         overview: Faker::Lorem.sentences,
-        agenda: Faker::Lorem.paragraph,
+        agenda: Faker::Lorem.sentences,
         start_datetime:Faker::Time.between(Date.today, Date.today, :morning),
         end_datetime:Faker::Time.between(Date.today, Date.today, :evening),
         category_id: Faker::Number.between(1, 5),
