@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   
   
   resources :categories do
-    resources :events do
+    resources :events, except: :index do
       resources :types do
         resources :tickets
       end
