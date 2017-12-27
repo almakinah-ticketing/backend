@@ -23,22 +23,46 @@ class Event < ApplicationRecord
     final_count = original_tickets - sold_tickets
   end
 
-  # tickets per type
-  def tickets_type
-    # self.types.where(:capacity)
-    current_capacity = self.types.find('2').name
-    types_array = self.types.ids
+  #hottest event
+  def hottest_event
+    
+    
   end
+
+  # tickets available per type
+  def tickets_type
+    sold_ticket =  Array.new
+    # current_capacity = self.types.find('2').name
+    types_array = self.types.pluck(:id)
+    types_capacity = self.types.pluck(:capacity)
+    j = 0
+    while j < types_array.size 
+      for i in types_array do
+        sold_ticket[j] = Ticket.where(type_id: i).count
+        j+=1
+      end
+    end
+    k = 0
+    available_ticket =  Array.new
+    while k < types_array.size
+      available_ticket[k] = types_capacity[k] - sold_ticket[k]
+      k+=1;
+    end
+    return available_ticket
+  end
+
+  # #tickets capacity per type
+  # def capacity_type
+  #   self.types.where(:capacity)
+  # end
 
   #events category
   def get_category
     current_category = self.category.name
   end
 
-  # calculate duration based on start and end datetimes
-  def duration
-    self.end_datetime - self.start_datetime    
-  end
+
+  
 
   # # Look into overriding default as_json implementation to return virtual attributes
   # def as_json(options = { })
