@@ -29,8 +29,8 @@
         title: Faker::Company.name,
         overview: Faker::Lorem.sentences,
         agenda: Faker::Lorem.sentences,
-        start_datetime:Faker::Time.between(Date.today, Date.today, :morning),
-        end_datetime:Faker::Time.between(Date.today, Date.today, :evening),
+        start_datetime:Faker::Time.between(Date.yesterday, Date.tomorrow, :evening),
+        end_datetime:Faker::Time.between(Date.tomorrow, Date.tomorrow, :evening),
         category_id: Faker::Number.between(1, 5),
         img: Faker::LoremPixel.image
     });
