@@ -2,9 +2,10 @@ class EventsController < ApplicationController
   before_action :set_event, only: [:show, :update, :destroy]
   # GET /events
   def index
-    @events = Event.order('start_datetime ASC');
+   
+    @event = Event.where(category_id: params[:category_id]).order('start_datetime ASC');
     display = []
-    @events.each do |event| 
+    @event.each do |event| 
       hash = event.as_json(
         include: {types: {only: [:name, :capacity]}, category: {only: [:id, :name]}},
         except: [:category_id]
@@ -12,6 +13,12 @@ class EventsController < ApplicationController
       display << hash;
     end
     render json: display
+    
+  end
+
+  def filter
+    @event = @event.starts_with(params[:starts_with]) if params[:starts_with].present?
+    render json: @event
   end
 
   # GET /events/1
@@ -31,6 +38,8 @@ class EventsController < ApplicationController
     }
     render json: display
   end
+
+  
   #hottest event
   def hot
     render json: 'hamada'

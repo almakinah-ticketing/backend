@@ -10,15 +10,15 @@ class CategoriesController < ApplicationController
 
   # GET /categories/1
   def show
-    display = []
-    @category.events.order('start_datetime ASC').each do |event| 
-      hash = event.as_json(
-        include: {types: {only: [:name, :capacity]}, category: {only: [:id, :name]}},
-        except: [:category_id]
-        )
-      display << hash;
-    end
-    render json: display
+    # display = []
+    # @category.events.order('start_datetime ASC').each do |event| 
+    #   hash = event.as_json(
+    #     include: {types: {only: [:name, :capacity]}, category: {only: [:id, :name]}},
+    #     except: [:category_id]
+    #     )
+    #   display << hash;
+    # end
+    render json: @category
   end
 
   # POST /categories
