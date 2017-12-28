@@ -6,9 +6,4 @@ class Type < ApplicationRecord
   has_many :tickets, dependent: :destroy
 
 
-
-  def get_event_types
-    self.event_ids
-  end
-
 end

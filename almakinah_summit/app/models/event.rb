@@ -7,6 +7,10 @@ class Event < ApplicationRecord
   has_many :types, dependent: :destroy
   has_many :tickets, dependent: :destroy
 
+  scope :starts_with, -> (start_datetime) { where("start_datetime like ?", "#{date}%")}
+
+
+
   # sold tickets count
   def tickets_count
     # scope :of_event, -> (id) { where(event_id: id) }
