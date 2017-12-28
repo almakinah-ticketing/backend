@@ -1,5 +1,16 @@
 Rails.application.routes.draw do
   
+  # root :to => "events#get_all"
+  get '/events', :to =>  'events#index'
+
+  # remove
+  get 'find/events', :to =>  'events#filters'
+  get 'filter/events', :to =>  'events#double_filter'
+  
+  #   collection do
+  #     get '/events_all', :to =>  'events#get_all'
+    
+  #   end 
   
   resources :categories do
     resources :events do

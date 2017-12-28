@@ -1,9 +1,12 @@
 class EventsController < ApplicationController
   before_action :set_event, only: [:show, :update, :destroy]
   # GET /events
+
+  # def index
+  #   @event = Event.where(category_id: params[:category_id]).order('start_datetime ASC');
+  # check params and filter accordingly & remove all, filters, and double_filter
   def index
-   
-    @event = Event.where(category_id: params[:category_id]).order('start_datetime ASC');
+    @event = Event.all.order('start_datetime ASC');
     display = []
     @event.each do |event| 
       hash = event.as_json(
@@ -13,7 +16,19 @@ class EventsController < ApplicationController
       display << hash;
     end
     render json: display
-    
+  end
+
+  #get all
+  def all
+    @events = Event.all
+    render json:  @events
+  end
+
+
+##filter by date
+  def filters
+    @events = Event.where(event_date: params[:event_date])
+    render json: @events
   end
 
   def filter
