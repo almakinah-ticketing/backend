@@ -1,24 +1,36 @@
 class EventsController < ApplicationController
   before_action :set_event, only: [:show, :update, :destroy]
   # GET /events
-  def index
-   
-    @event = Event.where(category_id: params[:category_id]).order('start_datetime ASC');
-    display = []
-    @event.each do |event| 
-      hash = event.as_json(
-        include: {types: {only: [:name, :capacity]}, category: {only: [:id, :name]}},
-        except: [:category_id]
-        )
-      display << hash;
-    end
-    render json: display
-    
+  # def index
+  #   @event = Event.where(category_id: params[:category_id]).order('start_datetime ASC');
+  #   display = []
+  #   @event.each do |event| 
+  #     hash = event.as_json(
+  #       include: {types: {only: [:name, :capacity]}, category: {only: [:id, :name]}},
+  #       except: [:category_id]
+  #       )
+  #     display << hash;
+  #   end
+  #   render json: display
+  # end
+
+  #get all
+  def all
+    @events = Event.all
+    render json:  @events
   end
 
-  def filter
-    @event = @event.starts_with(params[:starts_with]) if params[:starts_with].present?
-    render json: @event
+
+##filter by date
+  def filters
+    @events = Event.where(event_date: params[:event_date])
+    render json: @events
+  end
+
+  ##filter by date & category
+  def double_filter
+    @events = Event.where(event_date: params[:event_date],category_id: params[:category_id])
+    render json: @events
   end
 
   # GET /events/1
@@ -78,6 +90,6 @@ class EventsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def event_params
-      params.require(:event).permit(:title, :overview, :agenda, :event_date, :duration, :category_id)
+      params.require(:event).permit(:title, :overview, :agenda, :event_date, :duration, :category_id, :start_datetime, :end_datetime, :event_date)
     end
 end

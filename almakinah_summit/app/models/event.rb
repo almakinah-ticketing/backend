@@ -7,10 +7,10 @@ class Event < ApplicationRecord
   has_many :types, dependent: :destroy
   has_many :tickets, dependent: :destroy
 
-  scope :starts_with, -> (start_datetime) { where("start_datetime like ?", "#{date}%")}
-
-
-
+#  #filter
+#  def filter(date)
+#   filteredEvents = Event.where(start_datetime: date)
+#  end
   # sold tickets count
   def tickets_count
     # scope :of_event, -> (id) { where(event_id: id) }
@@ -29,7 +29,6 @@ class Event < ApplicationRecord
 
   #hottest event
   def hottest_event
-    
     
   end
 
