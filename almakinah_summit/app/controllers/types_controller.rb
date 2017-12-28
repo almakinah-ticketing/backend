@@ -3,15 +3,15 @@ class TypesController < ApplicationController
 
   # GET /types
   def index
-    @types = Type.find(params[:event_id])
-    render json: @types
+    @type = Type.where(event_id: params[:event_id])
+    render json: @type
   end
 
   # GET /types/1
   def show
     render json: @type
   end
-
+  
   # POST /types
   def create
     @type = Type.new(type_params)
@@ -40,11 +40,13 @@ class TypesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_type
+      
       @type = Type.find(params[:id])
     end
 
     # Only allow a trusted parameter "white list" through.
     def type_params
+     
       params.require(:type).permit(:name, :price, :capacity, :group_ticket_no, :event_id)
     end
 end
