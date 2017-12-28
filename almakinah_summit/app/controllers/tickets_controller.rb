@@ -3,7 +3,7 @@ class TicketsController < ApplicationController
 
   # GET /tickets
   def index
-    @tickets = Ticket.all
+    @tickets = Ticket.where(event_id: params[:event_id],type_id: params[:type_id])
 
     render json: @tickets
   end
