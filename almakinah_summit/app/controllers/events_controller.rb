@@ -11,6 +11,7 @@ class EventsController < ApplicationController
       else
         @events = Event.all.order('start_datetime ASC')
       end
+      # typeTicketsavailable = @events.map(&:tickets_type)
       display = []
       @events.each do |event| 
         hash = event.as_json(
@@ -18,9 +19,16 @@ class EventsController < ApplicationController
           except: [:category_id]
           )
         display << hash;
+        display << event.tickets_type
       end
-      render json: display
+      show = {
+        status: 'SUCCESS',
+      Events: display
+      }
+      render json: show
   end
+
+
 
   # GET /events/1
   def show
