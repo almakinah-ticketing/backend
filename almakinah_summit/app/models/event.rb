@@ -29,9 +29,12 @@ class Event < ApplicationRecord
 
   #hottest event
   def hottest_event
+    t1 =  Array.new
     Event.all.each do |event|
-      self.titles
+      type_ids = event.type_ids
+      t1 << Ticket.where(type_id: type_ids).count
     end
+    Event.where(id: t1.index(t1.max))
   end
 
   # tickets available per type

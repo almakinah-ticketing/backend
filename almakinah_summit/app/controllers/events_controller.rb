@@ -50,9 +50,11 @@ class EventsController < ApplicationController
   
   #hottest event
   def hot
-    render json: @event.hottest_event
-    
-  end
+    # render json: Event.order("RANDOM()").limit(1)
+    @event = Event.all
+    gett = @event.map(&:hottest_event)
+    render json: gett.first
+     end
   # POST /events
   def create
     @event = Event.new(event_params)
