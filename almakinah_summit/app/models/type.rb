@@ -5,5 +5,12 @@ class Type < ApplicationRecord
   validates :capacity, presence: true
   has_many :tickets, dependent: :destroy
 
+  # tickets available per type
+  def get_available
+        sold_ticket = Ticket.where(type_id: self.id).count
+        current_capacity = self.capacity
+        available_ticket = current_capacity - sold_ticket
+        return available_ticket
+  end
 
 end

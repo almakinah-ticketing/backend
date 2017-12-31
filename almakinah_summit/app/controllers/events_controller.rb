@@ -1,40 +1,28 @@
 class EventsController < ApplicationController
   before_action :set_event, only: [:show, :update, :destroy]
   # GET /events
-  # def index
-  #   @event = Event.where(category_id: params[:category_id]).order('start_datetime ASC');
-  #   display = []
-  #   @event.each do |event| 
-  #     hash = event.as_json(
-  #       include: {types: {only: [:name, :capacity]}, category: {only: [:id, :name]}},
-  #       except: [:category_id]
-  #       )
-  #     display << hash;
-  #   end
-  #   render json: display
-  # end
-
-  #get all
-  def all
-    @events = Event.all
-    render json:  @events
-  end
-
-
-##filter by date
-  def filters
-    @events = Event.where(event_date: params[:event_date])
-    render json: @events
-  end
-
-  ##filter by date & category
-  def double_filter
-    @events = Event.where(event_date: params[:event_date],category_id: params[:category_id])
-    render json: @events
+  def index
+      if params[:event_date] && params[:category_id]
+        @events = Event.where(event_date: params[:event_date], category_id: params[:category_id]).order('start_datetime ASC')
+      elsif params[:event_date]
+        @events = Event.where(event_date: params[:event_date]).order('start_datetime ASC')
+      elsif params[:category_id]
+        @events = Event.where(category_id: params[:category_id]).order('start_datetime ASC')
+      else
+        @events = Event.all.order('start_datetime ASC')
+      end
+      display = []
+      @events.each do |event| 
+        hash = event.as_json(
+          include: {types: {only: [:name, :capacity]}, category: {only: [:id, :name]}},
+          except: [:category_id]
+          )
+        display << hash;
+      end
+      render json: display
   end
 
   # GET /events/1
-  # Look into rendering this all as one object, perhaps using .to_json
   def show
     count = @event.tickets_count
     available = @event.tickets_available
@@ -54,7 +42,7 @@ class EventsController < ApplicationController
   
   #hottest event
   def hot
-    render json: 'hamada'
+    render json: @event.hottest_event
     
   end
   # POST /events
@@ -93,3 +81,38 @@ class EventsController < ApplicationController
       params.require(:event).permit(:title, :overview, :agenda, :event_date, :duration, :category_id, :start_datetime, :end_datetime, :event_date)
     end
 end
+
+
+######### old aproach:
+# def index
+#   @event = Event.where(category_id: params[:category_id]).order('start_datetime ASC');
+#     display = []
+#     @event.each do |event| 
+#       hash = event.as_json(
+#         include: {types: {only: [:name, :capacity]}, category: {only: [:id, :name]}},
+#         except: [:category_id]
+#         )
+#       display << hash;
+#     end
+#     render json: display
+  
+# end
+#   #get all
+#   def all
+#     @events = Event.all
+#     render json: @events.as_json(include: {category: {only: [:name]}, types: {only: [:name, :capacity]}})
+#   end
+
+
+# ##filter by date
+#   def filters
+#     @events = Event.where(event_date: params[:event_date])
+#     render json: @events
+#   end
+
+#   ##filter by date & category
+#   def double_filter
+#     @events = Event.where(event_date: params[:event_date],category_id: params[:category_id])
+#     render json: @events
+#   end
+##################################################################################################

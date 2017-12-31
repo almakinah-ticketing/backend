@@ -29,7 +29,9 @@ class Event < ApplicationRecord
 
   #hottest event
   def hottest_event
-    
+    Event.all.each do |event|
+      self.titles
+    end
   end
 
   # tickets available per type
@@ -64,7 +66,12 @@ class Event < ApplicationRecord
     current_category = self.category.name
   end
 
-
+  def get_available
+    sold_ticket = Ticket.where(type_id: self.id).count
+    current_capacity = self.capacity
+    available_ticket = current_capacity - sold_ticket
+    return available_ticket
+end
   
 
   # # Look into overriding default as_json implementation to return virtual attributes
