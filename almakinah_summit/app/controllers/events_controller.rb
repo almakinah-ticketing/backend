@@ -13,19 +13,13 @@ class EventsController < ApplicationController
       end
       # typeTicketsavailable = @events.map(&:tickets_type)
       display = []
-      @events.each do |event| 
-        hash = event.as_json(
-          include: {types: {only: [:name, :capacity]}, category: {only: [:id, :name]}},
+      @events.each do |event|
+        hash = event.as_json(include: {types: {only: [:name, :capacity], methods: :tickets_available_per_type}, category: {only: [:id, :name]}},
           except: [:category_id]
           )
-        display << hash;
-        display << event.tickets_type
+        display << hash
       end
-      show = {
-        status: 'SUCCESS',
-      Events: display
-      }
-      render json: show
+      render json: display
   end
 
 
@@ -35,14 +29,14 @@ class EventsController < ApplicationController
     count = @event.tickets_count
     available = @event.tickets_available
     category = @event.get_category
-    typeTicketsavailable = @event.tickets_type
+    # typeTicketsavailable = @event.tickets_type
     display = {
       status: 'SUCCESS',
       category: category,
-      tickets_available: available,
+      tickets_available_per_event: available,
       tickets_sold: count,
-      data:@event.as_json(include: {types: {only: [:name, :capacity, :price]}}),
-      tickets_available_per_type: typeTicketsavailable
+      data:@event.as_json(include: {types: {only: [:name, :capacity, :price], methods: :tickets_available_per_type}}),
+      # tickets_available_per_type: typeTicketsavailable
     }
     render json: display
   end

@@ -6,7 +6,7 @@ class Type < ApplicationRecord
   has_many :tickets, dependent: :destroy
 
   # tickets available per type
-  def get_available
+  def tickets_available_per_type
         sold_ticket = Ticket.where(type_id: self.id).count
         current_capacity = self.capacity
         available_ticket = current_capacity - sold_ticket

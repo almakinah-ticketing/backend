@@ -37,27 +37,27 @@ class Event < ApplicationRecord
     Event.where(id: t1.index(t1.max))
   end
 
-  # tickets available per type
-  def tickets_type
-    sold_ticket =  Array.new
-    # current_capacity = self.types.find('2').name
-    types_array = self.types.pluck(:id)
-    types_capacity = self.types.pluck(:capacity)
-    j = 0
-    while j < types_array.size 
-      for i in types_array do
-        sold_ticket[j] = Ticket.where(type_id: i).count
-        j+=1
-      end
-    end
-    k = 0
-    available_ticket =  Array.new
-    while k < types_array.size
-      available_ticket[k] = types_capacity[k] - sold_ticket[k]
-      k+=1;
-    end
-    return available_ticket
-  end
+  # # tickets available per type
+  # def tickets_type
+  #   sold_ticket =  Array.new
+  #   # current_capacity = self.types.find('2').name
+  #   types_array = self.types.pluck(:id)
+  #   types_capacity = self.types.pluck(:capacity)
+  #   j = 0
+  #   while j < types_array.size 
+  #     for i in types_array do
+  #       sold_ticket[j] = Ticket.where(type_id: i).count
+  #       j+=1
+  #     end
+  #   end
+  #   k = 0
+  #   available_ticket =  Array.new
+  #   while k < types_array.size
+  #     available_ticket[k] = types_capacity[k] - sold_ticket[k]
+  #     k+=1;
+  #   end
+  #   return available_ticket
+  # end
 
   # #tickets capacity per type
   # def capacity_type
