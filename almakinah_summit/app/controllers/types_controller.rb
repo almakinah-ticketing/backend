@@ -5,12 +5,7 @@ class TypesController < ApplicationController
   def index
     @types = Type.where(event_id: params[:event_id])
 
-    display = {
-      status: 'SUCCESS',
-      types_available: @types,
-      tickets: @types.map(&:get_available)
-    }
-    render json: display
+    render json: @types.to_json({methods: :tickets_available_per_type})
   end
 
   # GET /types/1
