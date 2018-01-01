@@ -2,6 +2,7 @@ class Event < ApplicationRecord
   belongs_to :category
   validates :title, presence: true
   validates :overview, presence: true
+  validates :event_date, presence: true
   validates :start_datetime, presence: true
   validates :end_datetime, presence: true
   has_many :types, dependent: :destroy

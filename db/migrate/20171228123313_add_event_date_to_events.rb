@@ -1,4 +1,4 @@
-class ChangeEvents < ActiveRecord::Migration[5.1]
+class AddEventDateToEvents < ActiveRecord::Migration[5.1]
   def change
       add_column :events, :event_date, :date
   end
