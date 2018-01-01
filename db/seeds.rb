@@ -33,8 +33,7 @@
         start_datetime:Faker::Time.between(Date.today, Date.today, :morning),
         end_datetime:Faker::Time.between(Date.today, Date.today, :evening),
         category_id: Faker::Number.between(1, 5),
-        img: Faker::LoremPixel.image,
-        event_date: "2017-12-31"
+        img: Faker::LoremPixel.image
     });
     Ticket.create({
         attendee_id: Faker::Number.between(1, 5),
