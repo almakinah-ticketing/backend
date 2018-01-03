@@ -17,7 +17,11 @@ gem 'puma', '~> 3.7'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
+# Use JWT for authentication
+gem 'jwt', '~> 2.1.0'
+# Use validates_email_format_of
+  gem 'validates_email_format_of'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -36,7 +40,6 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'faker'
-  gem 'validates_email_format_of'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
