@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171228123313) do
+ActiveRecord::Schema.define(version: 20180103150714) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,9 +20,12 @@ ActiveRecord::Schema.define(version: 20171228123313) do
     t.string "l_name"
     t.string "email"
     t.string "phone_number"
-    t.string "password"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "password_digest", null: false
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
   end
 
   create_table "attendees", force: :cascade do |t|
@@ -30,35 +33,39 @@ ActiveRecord::Schema.define(version: 20171228123313) do
     t.string "l_name"
     t.string "email"
     t.string "phone_number"
-    t.string "password"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "password_digest", null: false
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
   end
 
   create_table "categories", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "img", null: false
   end
 
   create_table "events", force: :cascade do |t|
-    t.string "title"
-    t.text "overview"
-    t.text "agenda"
-    t.bigint "category_id"
+    t.string "title", null: false
+    t.text "overview", null: false
+    t.text "agenda", null: false
+    t.integer "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "img"
-    t.datetime "start_datetime"
-    t.datetime "end_datetime"
-    t.date "event_date"
+    t.string "img", null: false
+    t.datetime "start_datetime", null: false
+    t.datetime "end_datetime", null: false
+    t.date "event_date", null: false
     t.index ["category_id"], name: "index_events_on_category_id"
   end
 
   create_table "tickets", force: :cascade do |t|
-    t.bigint "attendee_id"
-    t.bigint "type_id"
-    t.bigint "event_id"
+    t.integer "attendee_id", null: false
+    t.integer "type_id", null: false
+    t.integer "event_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["attendee_id"], name: "index_tickets_on_attendee_id"
@@ -67,11 +74,11 @@ ActiveRecord::Schema.define(version: 20171228123313) do
   end
 
   create_table "types", force: :cascade do |t|
-    t.string "name"
-    t.float "price"
-    t.integer "capacity"
-    t.integer "group_ticket_no"
-    t.bigint "event_id"
+    t.string "name", null: false
+    t.float "price", null: false
+    t.integer "capacity", null: false
+    t.integer "group_ticket_no", default: 1, null: false
+    t.integer "event_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["event_id"], name: "index_types_on_event_id"

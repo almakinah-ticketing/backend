@@ -23,15 +23,16 @@
         password:"123456789"
     });
     Category.create({
-        name: Faker::Color.color_name
+        name: Faker::Color.color_name,
+        img: Faker::LoremPixel.image
     });
     Event.create({
         title: Faker::Company.name,
         overview: Faker::Lorem.sentences,
         agenda: Faker::Lorem.sentences,
-        event_date: "2017-12-02",
-        start_datetime:Faker::Time.between(Date.today, Date.today, :morning),
-        end_datetime:Faker::Time.between(Date.today, Date.today, :evening),
+        event_date: "2018-01-04",
+        start_datetime:Faker::Time.between(Date.tomorrow, Date.tomorrow, :morning),
+        end_datetime:Faker::Time.between(Date.tomorrow, Date.tomorrow, :evening),
         category_id: Faker::Number.between(1, 5),
         img: Faker::LoremPixel.image
     });

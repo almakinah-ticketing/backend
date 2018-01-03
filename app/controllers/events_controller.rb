@@ -14,9 +14,16 @@ class EventsController < ApplicationController
       # typeTicketsavailable = @events.map(&:tickets_type)
       display = []
       @events.each do |event|
-        hash = event.as_json(include: {types: {only: [:name, :capacity], methods: :tickets_available_per_type}, category: {only: [:id, :name]}},
-          except: [:category_id]
-          )
+        count = event.tickets_count
+        available = event.tickets_available
+        category = event.get_category
+        hash = {
+          tickets_available_per_event: available,
+          tickets_sold: count,
+          data: event.as_json(include: {types: {only: [:name, :capacity], methods: :tickets_available_per_type}, category: {only: [:id, :name]}},
+                                            except: [:category_id]
+                                            )
+        }
         display << hash
       end
       render json: display
@@ -29,26 +36,38 @@ class EventsController < ApplicationController
     count = @event.tickets_count
     available = @event.tickets_available
     category = @event.get_category
-    # typeTicketsavailable = @event.tickets_type
     display = {
-      status: 'SUCCESS',
-      category: category,
       tickets_available_per_event: available,
       tickets_sold: count,
-      data:@event.as_json(include: {types: {only: [:name, :capacity, :price], methods: :tickets_available_per_type}}),
-      # tickets_available_per_type: typeTicketsavailable
+      data:@event.as_json(include: {types: {only: [:name, :capacity, :price], methods: :tickets_available_per_type}, category: {only: [:id, :name]}},
+                                          except: [:category_id]
+                                          )
     }
     render json: display
   end
 
   
-  #hottest event
-  def hot
-    # render json: Event.order("RANDOM()").limit(1)
-    @event = Event.all
-    gett = @event.map(&:hottest_event)
-    render json: gett.first
-     end
+  # #events sorted according to hottest status
+  # def hottest
+  #   # render json: Event.order("RANDOM()").limit(1)
+  #   @hottest_events = Event.hottest_events
+  #   display = []
+  #   @hottest_events.each do |event|
+  #     count = event.tickets_count
+  #     available = event.tickets_available
+  #     category = event.get_category
+  #     hash = {
+  #       tickets_available_per_event: available,
+  #       tickets_sold: count,
+  #       data: event.as_json(include: {types: {only: [:name, :capacity], methods: :tickets_available_per_type}, category: {only: [:id, :name]}},
+  #                                         except: [:category_id]
+  #                                         )
+  #     }
+  #     display << hash
+  #   end
+  #   render json: display
+  # end
+    
   # POST /events
   def create
     @event = Event.new(event_params)
@@ -63,7 +82,7 @@ class EventsController < ApplicationController
   # PATCH/PUT /events/1
   def update
     if @event.update(event_params)
-      render json: @event
+      render json: @event, status: :ok, location: @event
     else
       render json: @event.errors, status: :unprocessable_entity
     end
@@ -72,6 +91,7 @@ class EventsController < ApplicationController
   # DELETE /events/1
   def destroy
     @event.destroy
+    render body: nil, status: :no_content
   end
 
    private
@@ -82,7 +102,7 @@ class EventsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def event_params
-      params.require(:event).permit(:title, :overview, :agenda, :event_date, :duration, :category_id, :start_datetime, :end_datetime, :event_date)
+      params.require(:event).permit(:title, :overview, :agenda, :event_date, :start_datetime, :end_datetime, :duration, :category_id)
     end
 end
 
