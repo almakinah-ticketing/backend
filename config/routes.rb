@@ -1,11 +1,10 @@
-Rails.application.routes.draw do
-   
+Rails.application.routes.draw do  
   resources :attendees
   resources :admins
   # resources :events
   # resources :types
   # resources :tickets
-  
+  resources :charges
   resources :categories
 
    resources :events do
@@ -19,7 +18,7 @@ Rails.application.routes.draw do
   # get 'find/events', :to =>  'events#filters'
   # get 'filter/events', :to =>  'events#double_filter'
   get 'hot/event', :to => 'events#hot'
-
+  # get '/payment', :to => 'pages#home'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
