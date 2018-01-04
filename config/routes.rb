@@ -18,7 +18,8 @@ Rails.application.routes.draw do
   # get 'find/events', :to =>  'events#filters'
   # get 'filter/events', :to =>  'events#double_filter'
   get 'hot/event', :to => 'events#hot'
-  # get '/payment', :to => 'pages#home'
+  get '/payment', :to => 'tickets#payment'
+  post '/buy', :to => 'tickets#create'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
