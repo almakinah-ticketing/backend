@@ -117,6 +117,7 @@ GEM
       sprockets (>= 3.0.0)
     thor (0.20.0)
     thread_safe (0.3.6)
+    titlecase (0.1.1)
     tzinfo (1.2.4)
       thread_safe (~> 0.1)
     validates_email_format_of (1.6.3)
@@ -140,6 +141,7 @@ DEPENDENCIES
   rails (~> 5.1.4)
   spring
   spring-watcher-listen (~> 2.0.0)
+  titlecase
   tzinfo-data
   validates_email_format_of
 
