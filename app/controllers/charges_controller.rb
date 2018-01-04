@@ -15,7 +15,7 @@ class ChargesController < ApplicationController
         :source  => params[:stripeToken]
       )
       charge = Stripe::Charge.create(
-        :customer    => customer.id,
+        # :customer    => customer.id,
         :amount      => @amount,
         :description => 'Rails Stripe customer',
         :currency    => 'usd'
@@ -25,12 +25,10 @@ class ChargesController < ApplicationController
     end
 
     if charge_error
-      flash[:error] = charge_error
+      # flash[:error] = charge_error
       render :new
     else
-      @event = Event.find(params[:event_id])
-      ticket = Ticket.new(ticket_params)
-      ticket.save
+      render json: @amount , status: :payment
     end
   end
 

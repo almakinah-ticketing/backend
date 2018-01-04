@@ -14,9 +14,8 @@ class TicketsController < ApplicationController
   end
   #payment
   def payment
-    respond_to do |format|
-      format.html { redirect_to controller: 'charges', action: 'new', event_id: @event_id}
-    end
+    redirect_to controller: 'charges', action: 'create', event_id: @event_id
+    render json: @ticket , status: :payment
   end
   # POST /tickets
   def create
