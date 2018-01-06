@@ -53,7 +53,7 @@ class AdminsController < ApplicationController
       @admin.mark_as_confirmed!
       render json: @admin, status: :ok, location: @admin
     else
-      render json: {error: 'Invalid Token'}, status: :not_found
+      render json: 'Invalid token', status: :not_found
     end
   end
 
@@ -62,14 +62,21 @@ class AdminsController < ApplicationController
     @admin = Admin.find_by(email: params[:email].to_s.downcase)
 
     if @admin && @admin.authenticate(params[:password])
-      if @admin.confirmed_at?
-        auth_token = JsonWebToken.encode({admin_id: @admin.id})
+      # if @admin.confirmed_at?
+        # admin_hash = @admin.attributes
+        admin_hash = {
+          admin_id: @admin.id,
+          f_name: @admin.f_name,
+          l_name: @admin.l_name,
+          email: @admin.email
+        }
+        auth_token = JsonWebToken.encode(admin_hash)
         render json: {auth_token: auth_token}, status: :ok
-      else
-        render json: {error: 'Email Not Verified'}, status: :unauthorized
-      end
+      # else
+      #   render json: {error: 'Email Not Verified'}, status: :unauthorized
+      # end
     else
-      render json: {error: 'Invalid Username/Password'}, status: :unauthorized
+      render json: 'Invalid username or password', status: :unauthorized
     end
   end
 
@@ -85,7 +92,7 @@ class AdminsController < ApplicationController
   end
 
   def invalid_authentication
-    render json: {error: 'Not Authenticated'}, status: :unauthorized
+    render json: 'Not authenticated', status: :unauthorized
   end
 
   private
