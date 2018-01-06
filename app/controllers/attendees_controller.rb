@@ -21,10 +21,10 @@ class AttendeesController < ApplicationController
     @attendee = Attendee.new(attendee_params)
 
     if @attendee.save
-      # Invoke send email confirmation email method here - email includes admin.confirmation_token
+      # Invoke send email confirmation email method here - email includes attendee.confirmation_token
       render json: @attendee, status: :created, location: @attendee
     else
-      render json: @attendee.errors, status: :unprocessable_entity
+      render json: @attendee.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -53,23 +53,32 @@ class AttendeesController < ApplicationController
       @attendee.mark_as_confirmed!
       render json: @attendee, status: :ok, location: @attendee
     else
-      render json: {error: 'Invalid Token'}, status: :not_found
+      render json: 'Invalid token', status: :not_found
     end
   end
 
   # POST /attendees/login
   def login
+    puts @attendee
+    puts params[:password]
+    
     @attendee = Attendee.find_by(email: params[:email].to_s.downcase)
 
     if @attendee && @attendee.authenticate(params[:password])
-      if @attendee.confirmed_at?
-        auth_token = JsonWebToken.encode({attendee_id: @attendee.id})
+      # if @attendee.confirmed_at?
+        attendee_hash = {
+          attendee_id: @attendee.id,
+          f_name: @attendee.f_name,
+          l_name: @attendee.l_name,
+          email: @attendee.email
+        }
+        auth_token = JsonWebToken.encode(attendee_hash)
         render json: {auth_token: auth_token}, status: :ok
-      else
-        render json: {error: 'Email Not Verified'}, status: :unauthorized
-      end
+      # else
+      #   render json: {error: 'Email Not Verified'}, status: :unauthorized
+      # end
     else
-      render json: {error: 'Invalid Username/Password'}, status: :unauthorized
+      render json: 'Invalid username or password', status: :unauthorized
     end
   end
 
@@ -85,7 +94,7 @@ class AttendeesController < ApplicationController
   end
 
   def invalid_authentication
-    render json: {error: 'Not Authenticated'}, status: :unauthorized
+    render json: 'Not authenticated', status: :unauthorized
   end
 
   private
