@@ -71,6 +71,7 @@ class EventsController < ApplicationController
   # POST /events
   def create
     @event = Event.new(event_params)
+    @event.img = params[:event][:file] 
 
     if @event.save
       render json: @event, status: :created, location: @event
@@ -102,7 +103,8 @@ class EventsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def event_params
-      params.require(:event).permit(:title, :overview, :agenda, :event_date, :start_datetime, :end_datetime, :duration, :category_id)
+      params.require(:event).permit(:title, :overview, :agenda, :event_date, :start_datetime, :end_datetime, :duration, :category_id, :file,
+        types_attributes: [:name, :capacity, :price])
     end
 end
 

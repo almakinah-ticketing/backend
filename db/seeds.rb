@@ -34,7 +34,8 @@
         start_datetime:Faker::Time.between(Date.tomorrow, Date.tomorrow, :morning),
         end_datetime:Faker::Time.between(Date.tomorrow, Date.tomorrow, :evening),
         category_id: Faker::Number.between(1, 5),
-        img: Faker::LoremPixel.image
+        img:  Rails.root.join("db/images/event.jpeg").open
+       
     });
     Ticket.create({
         attendee_id: Faker::Number.between(1, 5),
