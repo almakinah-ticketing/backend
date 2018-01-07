@@ -1,9 +1,10 @@
 class Type < ApplicationRecord
   belongs_to :event
-  validates :name, presence: true
-  validates :price, presence: true
-  validates :capacity, presence: true
   has_many :tickets, dependent: :destroy
+
+  validates :name, presence: true, uniqueness: true, length: {minimum: 1, maximum: 20}, format: {with: /[A-Z]+\w*/}
+  validates :price, presence: true, numericality: true
+  validates :capacity, presence: true, numericality: true
 
   # tickets available per type
   def tickets_available_per_type
