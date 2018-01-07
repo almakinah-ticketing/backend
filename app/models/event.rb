@@ -28,15 +28,22 @@ class Event < ApplicationRecord
     final_count = original_tickets - sold_tickets
   end
 
-  #hottest event
-  def hottest_event
-    t1 =  Array.new
-    Event.all.each do |event|
-      type_ids = event.type_ids
-      t1 << Ticket.where(type_id: type_ids).count
-    end
-    Event.where(id: t1.index(t1.max))
-  end
+  # #events sorted according to hottest status
+  # def self.hottest_events
+  #   tickets_sold_array = Array.new
+  #   Event.all.each do |event|
+  #     type_ids = event.type_ids
+  #     tickets_sold_array << Ticket.where(type_id: type_ids).count
+  #   end
+  #   tickets_sold_array_sorted.each do |tickets_sold|
+  #     event_id = tickets_sold_array_sorted.index(tickets_sold) + 1
+  #     event = Event.find(event_id)
+  #     if event.tickets_available != 0
+  #       return event
+  #     else
+  #   end
+  #   return @hottest_events
+  # end
 
   # # tickets available per type
   # def tickets_type

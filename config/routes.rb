@@ -1,9 +1,14 @@
-Rails.application.routes.draw do  
-  resources :attendees
-  resources :admins
-  # resources :events
-  # resources :types
-  # resources :tickets
+Rails.application.routes.draw do
+   
+  resources :attendees do 
+    post 'confirm', on: :collection
+    post 'login', on: :collection
+  end
+
+  resources :admins do
+    post 'confirm', on: :collection
+    post 'login', on: :collection
+  end
   resources :charges
   resources :categories
 
@@ -17,7 +22,7 @@ Rails.application.routes.draw do
   # get '/events', :to =>  'events#all'
   # get 'find/events', :to =>  'events#filters'
   # get 'filter/events', :to =>  'events#double_filter'
-  get 'hot/event', :to => 'events#hot'
+  # match '/events/hottest', to: 'events#hot', via: :get
   post '/payment', :to => 'charges#create'
   post '/buy', :to => 'tickets#create'
 
