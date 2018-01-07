@@ -22,7 +22,7 @@ class JsonWebToken
 
   def self.meta
     {
-      exp: 7.days.from_now.to_i,
+      exp: 7.days.from_now,
       iss: 'almakinah_rails_backend',
       aud: 'almakinah_react_frontend'
     }
