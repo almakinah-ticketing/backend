@@ -1,4 +1,5 @@
 class Event < ApplicationRecord
+  mount_uploader :img, ImgUploader
   belongs_to :category
   validates :title, presence: true
   validates :overview, presence: true
@@ -7,6 +8,8 @@ class Event < ApplicationRecord
   validates :end_datetime, presence: true
   has_many :types, dependent: :destroy
   has_many :tickets, dependent: :destroy
+
+  accepts_nested_attributes_for :types
 
 #  #filter
 #  def filter(date)
