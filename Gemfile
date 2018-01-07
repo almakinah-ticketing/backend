@@ -22,9 +22,11 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'jwt', '~> 2.1.0'
 # Use validates_email_format_of
   gem 'validates_email_format_of'
+  
   # Use titlecase
   gem 'titlecase'
-
+#gem 'stripe' for online payment
+gem 'stripe'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
