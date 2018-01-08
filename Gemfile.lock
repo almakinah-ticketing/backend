@@ -146,10 +146,10 @@ DEPENDENCIES
   rails (~> 5.1.4)
   spring
   spring-watcher-listen (~> 2.0.0)
+  stripe
   titlecase
   tzinfo-data
   validates_email_format_of
- stripe
 
 BUNDLED WITH
    1.16.0
