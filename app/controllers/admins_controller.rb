@@ -2,8 +2,6 @@ class AdminsController < ApplicationController
   before_action :set_admin, only: [:show, :update, :destroy]
   before_action :authenticate_admin!, only: [:index, :show, :update, :destroy]
 
-  attr_reader :current_admin
-
   # GET /admins
   def index
     @admins = Admin.all
@@ -43,7 +41,7 @@ class AdminsController < ApplicationController
     head :no_content
   end
 
-  # POST /admins/confirm
+  # POST /admins/confirmations
   def confirm
     token = params[:token].to_s
 
@@ -57,7 +55,7 @@ class AdminsController < ApplicationController
     end
   end
 
-  # POST /admins/login
+  # POST /admins/logins
   def login
     @admin = Admin.find_by(email: params[:email].to_s.downcase)
 
@@ -79,22 +77,7 @@ class AdminsController < ApplicationController
       render json: 'Invalid username or password', status: :unauthorized
     end
   end
-
-  protected
-  def authenticate_admin!
-    if !payload || !JsonWebToken.valid_payload(payload) || !admin_id_in_token?
-      return invalid_authentication
-    end
-
-    @current_admin = Admin.find(payload[:admin_id])
-  rescue JWT::VerificationError, JWT::DecodeError
-    return invalid_authentication    
-  end
-
-  def invalid_authentication
-    render json: 'Not authenticated', status: :unauthorized
-  end
-
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_admin
@@ -104,21 +87,5 @@ class AdminsController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def admin_params
       params.require(:admin).permit(:f_name, :l_name, :email, :phone_number, :password, :password_confirmation)
-    end
-
-    def token
-      @token ||= if request.headers['Authorization'].present?
-        request.headers['Authorization'].split(' ').last
-      end
-    end
-
-    def payload
-      @payload ||= JsonWebToken.decode(token)
-    rescue
-      nil
-    end
-
-    def admin_id_in_token?
-      token && payload && payload[:admin_id].to_i
     end
 end

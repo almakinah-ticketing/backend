@@ -5,7 +5,7 @@ class TicketsController < ApplicationController
   def index
     @tickets = Ticket.where(event_id: params[:event_id],type_id: params[:type_id])
 
-    render json: @tickets
+    render json: @tickets.as_json(include: {type: {only: [:name, :price]}})
   end
 
   # GET /tickets/1

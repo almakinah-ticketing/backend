@@ -8,10 +8,13 @@ class Type < ApplicationRecord
 
   # tickets available per type
   def tickets_available_per_type
-        sold_ticket = Ticket.where(type_id: self.id).count
-        current_capacity = self.capacity
-        available_ticket = current_capacity - sold_ticket
-        return available_ticket
+  sold_tickets = Ticket.where(type_id: self.id).count
+  current_capacity = self.capacity
+  available_ticket = current_capacity - sold_tickets
+  return available_ticket
   end
 
+  def tickets_sold_per_type
+    sold_tickets = Ticket.where(type_id: self.id).count
+  end
 end
