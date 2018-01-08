@@ -1,13 +1,13 @@
 Rails.application.routes.draw do
    
   resources :attendees do 
-    post 'confirm', on: :collection
-    post 'login', on: :collection
+    post 'confirmations', to: 'attendees#confirm', on: :collection
+    post 'logins', to: 'attendees#login', on: :collection
   end
 
   resources :admins do
-    post 'confirm', on: :collection
-    post 'login', on: :collection
+    post 'confirmations', to: 'admins#confirm', on: :collection
+    post 'logins', to: 'admins#login', on: :collection
   end
 
   resources :categories
