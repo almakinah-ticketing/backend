@@ -19,33 +19,34 @@
     #     l_name: Faker::Name.last_name,
     #     email: Faker::Internet.email,
     #     phone_number: Faker::PhoneNumber.cell_phone,
-    #     password:"123456789"
+    #     password_digest:"123456789"
     # });
-    Category.create!({
-        name: Faker::ProgrammingLanguage.name,
-        img: Faker::LoremPixel.image
-    });
-    Event.create!({
-        title: Faker::Company.name,
-        overview: Faker::Lorem.sentences,
-        agenda: Faker::Lorem.sentences,
-        event_date: "2018-01-07",
-        start_datetime:Faker::Time.between(Date.tomorrow, Date.tomorrow, :morning),
-        end_datetime:Faker::Time.between(Date.tomorrow, Date.tomorrow, :evening),
-        category_id: Faker::Number.between(1, 7),
-        img: Faker::LoremPixel.image
-    });
-    Ticket.create!({
-        attendee_id: Faker::Number.between(1, 7),
-        type_id: Faker::Number.between(1, 7),
-        event_id:Faker::Number.between(1, 7)
-    });
+    # category = Category.create!({
+    #     name: Faker::ProgrammingLanguage.unique.name,
+    #     img: Faker::LoremPixel.image
+    # });
+    # event = Event.create!({
+    #     title: Faker::Company.unique.name,
+    #     overview: Faker::Lorem.sentences,
+    #     agenda: Faker::Lorem.sentences,
+    #     event_date: "2018-01-08",
+    #     start_datetime:Faker::Time.between(Date.tomorrow, Date.tomorrow, :morning),
+    #     end_datetime:Faker::Time.between(Date.tomorrow, Date.tomorrow, :evening),
+    #     category_id: Faker::Number.between(1, 5),
+    #     img: Faker::LoremPixel.image
+    # });
+    # Ticket.create!({
+    #     # attendee_id: Faker::Number.between(1, 5),
+    #     attendee_id:1,
+    #     type_id: Faker::Number.between(1, 5),
+    #     event_id:Faker::Number.between(1, 5)
+    # });
     Type.create!({
-        name: Faker::Company.type,
+        name: Faker::Company.unique.type,
         price: Faker::Number.positive,
         capacity: Faker::Number.number(3),
         group_ticket_no: "1",
-        event_id: Faker::Number.between(1, 7)
+        event_id: Faker::Number.between(1, 5)
     });
 end
 # 50.times do
