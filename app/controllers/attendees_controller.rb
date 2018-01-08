@@ -1,8 +1,7 @@
 class AttendeesController < ApplicationController
-  before_action :set_attendee, only: [:show, :update, :destroy]
+  before_action :set_attendee_hash, only: [:show]
+  before_action :set_attendee, only: [:update, :destroy]
   before_action :authenticate_attendee!, only: [:index, :show, :update, :destroy]
-
-  attr_reader :current_attendee
 
   # GET /attendees
   def index
@@ -13,7 +12,7 @@ class AttendeesController < ApplicationController
 
   # GET /attendees/1
   def show
-    render json: @attendee, status: :ok, location: @attendee
+    render json: @attendee_hash, status: :ok, location: @attendee
   end
 
   # POST /attendees
@@ -43,7 +42,7 @@ class AttendeesController < ApplicationController
     head :no_content
   end
 
-  # POST /attendees/confirm
+  # POST /attendees/confirmations
   def confirm
     token = params[:token].to_s
 
@@ -57,22 +56,27 @@ class AttendeesController < ApplicationController
     end
   end
 
-  # POST /attendees/login
+  # POST /attendees/logins
   def login
-    puts @attendee
-    puts params[:password]
-    
     @attendee = Attendee.find_by(email: params[:email].to_s.downcase)
 
-    if @attendee && @attendee.authenticate(params[:password])
-      # if @attendee.confirmed_at?
-        attendee_hash = {
+    @attendee_ticket_objects = @attendee.tickets.to_a
+    @attendee_ticket_hashes = []
+    @attendee_ticket_objects.each do |ticket|
+      @attendee_ticket_hashes << ticket.attributes
+    end
+
+    @attendee_hash = {
           attendee_id: @attendee.id,
           f_name: @attendee.f_name,
           l_name: @attendee.l_name,
-          email: @attendee.email
+          email: @attendee.email,
+          tickets_bought: @attendee_ticket_hashes
         }
-        auth_token = JsonWebToken.encode(attendee_hash)
+
+    if @attendee && @attendee.authenticate(params[:password])
+      # if @attendee.confirmed_at?
+        auth_token = JsonWebToken.encode(@attendee_hash)
         render json: {auth_token: auth_token}, status: :ok
       # else
       #   render json: {error: 'Email Not Verified'}, status: :unauthorized
@@ -82,45 +86,32 @@ class AttendeesController < ApplicationController
     end
   end
 
-  protected
-  def authenticate_attendee!
-    if !payload || !JsonWebToken.valid_payload(payload) || !attendee_id_in_token?
-      return invalid_authentication
-    end
-
-    @current_attendee = Attendee.find(payload[:attendee_id])
-  rescue JWT::VerificationError, JWT::DecodeError
-    return invalid_authentication    
-  end
-
-  def invalid_authentication
-    render json: 'Not authenticated', status: :unauthorized
-  end
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_attendee
       @attendee = Attendee.find(params[:id])
     end
 
+    def set_attendee_hash
+      @attendee = Attendee.find(params[:id])
+
+      @attendee_ticket_objects = @attendee.tickets.to_a
+      @attendee_ticket_hashes = []
+      @attendee_ticket_objects.each do |ticket|
+        @attendee_ticket_hashes << ticket.attributes
+      end
+
+      @attendee_hash = {
+          attendee_id: @attendee.id,
+          f_name: @attendee.f_name,
+          l_name: @attendee.l_name,
+          email: @attendee.email,
+          tickets_bought: @attendee_ticket_hashes
+        }
+    end
+
     # Only allow a trusted parameter "white list" through.
     def attendee_params
       params.require(:attendee).permit(:f_name, :l_name, :email, :phone_number, :password, :password_confirmation)
-    end
-
-    def token
-      @token ||= if request.headers['Authorization'].present?
-        request.headers['Authorization'].split(' ').last
-      end
-    end
-
-    def payload
-      @payload ||= JsonWebToken.decode(token)
-    rescue
-      nil
-    end
-
-    def attendee_id_in_token?
-      token && payload && payload[:attendee_id].to_i
     end
 end

@@ -11,8 +11,7 @@ module Validatable
   validates :f_name, presence: true, length: {minimum: 1, maximum: 20}, format: {with: /[A-Z]+\w*/}
   validates :l_name, presence: true, length: {minimum: 1, maximum: 20}, format: {with: /[A-Z]+\w*/}
   validates :phone_number, presence: true, length: {minimum: 9, maximum: 11}, format: {with: /\d*/}
-  validates :password, confirmation: true
-  # presence: true, length: {minimum: 8, maximum: 72}, format: {with: /(\w*[-\/\\^$*+?!&.()|[\]{}]*){3,10}/}
+  # validates :password, presence: true, confirmation: true, length: {minimum: 8, maximum: 72}, format: {with: /(\w*[-\/\\^$*+?!&.()|[\]{}]*){3,10}/}
  end
 
  def downcase_email

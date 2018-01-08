@@ -85,5 +85,4 @@ ActiveRecord::Schema.define(version: 20180103150714) do
   end
 
   add_foreign_key "events", "categories"
-  add_foreign_key "types", "events"
 end
