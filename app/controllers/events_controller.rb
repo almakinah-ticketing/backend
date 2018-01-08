@@ -8,6 +8,12 @@ class EventsController < ApplicationController
         @events = Event.where(event_date: params[:event_date]).order('start_datetime ASC')
       elsif params[:category_id]
         @events = Event.where(category_id: params[:category_id]).order('start_datetime ASC')
+      elsif params[:popularity]
+        if params[:popularity] == 'desc'
+          @events = Event.all.sort_by(&:tickets_count).reverse
+        elsif params[:popularity] == 'asc'
+          @events = Event.all.sort_by(&:tickets_count)
+        end
       else
         @events = Event.all.order('start_datetime ASC')
       end
@@ -15,12 +21,16 @@ class EventsController < ApplicationController
       display = []
       @events.each do |event|
         count = event.tickets_count
+        count_per_month = event.tickets_count_per_month
+        revenues_per_month = event.revenues_per_month
         available = event.tickets_available
         category = event.get_category
         hash = {
           tickets_available_per_event: available,
           tickets_sold: count,
-          data: event.as_json(include: {types: {only: [:name, :capacity], methods: :tickets_available_per_type}, category: {only: [:id, :name]}},
+          tickets_sold_per_month: count_per_month,
+          revenues_per_month: revenues_per_month,
+          data: event.as_json(include: {types: {only: [:name, :capacity, :price], methods: [:tickets_available_per_type, :tickets_sold_per_type, :tickets_sold_per_type_per_month, :revenues_per_type_per_month]}, category: {only: [:id, :name]}},
                                             except: [:category_id]
                                             )
         }
@@ -34,12 +44,16 @@ class EventsController < ApplicationController
   # GET /events/1
   def show
     count = @event.tickets_count
+    count_per_month = @event.tickets_count_per_month
+    revenues_per_month = event.revenues_per_month
     available = @event.tickets_available
     category = @event.get_category
     display = {
       tickets_available_per_event: available,
       tickets_sold: count,
-      data:@event.as_json(include: {types: {only: [:name, :capacity, :price], methods: [:tickets_available_per_type, :tickets_sold_per_type]}, category: {only: [:id, :name]}},
+      tickets_sold_per_month: count_per_month,
+      revenues_per_month: revenues_per_month,
+      data:@event.as_json(include: {types: {only: [:name, :capacity, :price], methods: [:tickets_available_per_type, :tickets_sold_per_type, :tickets_sold_per_type_per_month, :revenues_per_type_per_month]}, category: {only: [:id, :name]}},
                                           except: [:category_id]
                                           )
     }

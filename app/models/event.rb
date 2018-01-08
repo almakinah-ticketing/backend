@@ -20,14 +20,38 @@ class Event < ApplicationRecord
   def tickets_count
     # scope :of_event, -> (id) { where(event_id: id) }
     # from_db = self.type.find(params[:id])
-    type_ids = self.type_ids
-    tickets = Ticket.where(type_id: type_ids).count
+    # byebug
+    # type_ids = self.type_ids
+    Ticket.where(event_id: self.id).count
+  end
+
+  def tickets_count_per_month
+    @counts = Ticket.where(event_id: self.id).group("DATE_TRUNC('month', created_at)").count
+    @parsed_counts = {}
+    @counts.each do |m|
+      @parsed_counts.reverse_merge!({"#{m[0].strftime("%b %Y")}": m[1]})
+    end
+    @parsed_counts
+  end
+
+  def revenues_per_month
+    @types = self.types
+    @keys = @types[0].revenues_per_type_per_month.keys
+    @revenues_per_month = {}
+    # Figure out how to do nested loops or find alternative solution
+    @keys.each do |key| 
+        key = key.to_sym
+        for type in @types
+            revenues_per_month[key] += @types[i].revenues_per_type_per_month[key]
+        end
+      end
+      @revenues_per_month
   end
 
   #remaining tickets
   def tickets_available
     type_ids = self.type_ids
-    sold_tickets = Ticket.where(type_id: type_ids).count
+    sold_tickets = Ticket.where(event_id: self.id).count
     original_tickets = self.types.sum(:capacity)
     final_count = original_tickets - sold_tickets
   end
