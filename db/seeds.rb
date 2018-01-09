@@ -41,27 +41,34 @@
     #     type_id: Faker::Number.between(1, 5),
     #     event_id:Faker::Number.between(1, 5)
     # });
+    puts 'CREATING CATEGORY...'
     category = Category.create!({
-        name: Faker::ProgrammingLanguage.unique.name,
+        name: Faker::ProgrammingLanguage.unique.name[0..15],
         img: Faker::LoremPixel.image
     });
+
+    puts 'CREATING EVENT...'
     event = Event.create!({
-        title: Faker::Company.unique.name,
+        title: Faker::Company.unique.name[0..15],
         overview: Faker::Lorem.sentences,
         agenda: Faker::Lorem.sentences,
-        event_date: "2018-01-08",
         start_datetime:Faker::Time.between(Date.tomorrow, Date.tomorrow, :morning),
         end_datetime:Faker::Time.between(Date.tomorrow, Date.tomorrow, :evening),
+        # category_id: Faker::Number.between(1, 5),
         category_id: category.id,
-        img: Faker::LoremPixel.image
+        img:  Rails.root.join("db/images/event.jpeg").open
+       
+        # img: Faker::LoremPixel.image
+
     });
     # Ticket.create!({
     #     attendee_id: Faker::Number.between(1, 7),
     #     type_id: Faker::Number.between(1, 7),
     #     event_id:Faker::Number.between(1, 7)
     # });
+    puts 'CREATING TYPE...'
     Type.create!({
-        name: Faker::Company.unique.type,
+        name: Faker::Company.unique.type[0..15],
         price: Faker::Number.positive,
         capacity: Faker::Number.number(3),
         group_ticket_no: "1",
