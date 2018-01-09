@@ -11,11 +11,18 @@ class Event < ApplicationRecord
 
   accepts_nested_attributes_for :types
 
+  after_initialize :set_event_date
+
 #  #filter
 #  def filter(date)
 #   filteredEvents = Event.where(start_datetime: date)
 #  end
   # sold tickets count
+
+  def set_event_date
+    self.event_date = self.start_datetime.to_date
+  end
+
   def tickets_count
     # scope :of_event, -> (id) { where(event_id: id) }
     # from_db = self.type.find(params[:id])
