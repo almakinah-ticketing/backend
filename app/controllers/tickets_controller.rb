@@ -5,24 +5,32 @@ class TicketsController < ApplicationController
   def index
     @tickets = Ticket.where(event_id: params[:event_id],type_id: params[:type_id])
 
-    render json: @tickets
+    render json: @tickets.as_json(include: {type: {only: [:name, :price]}})
   end
 
   # GET /tickets/1
   def show
     render json: @ticket
   end
-
+  #payment
+  def payment
+    redirect_to controller: 'charges', action: 'create', event_id: @event_id
+    render json: @ticket , status: :payment
+  end
   # POST /tickets
   def create
-    @ticket = Ticket.new(ticket_params)
-
-    if @ticket.save
-      render json: @ticket, status: :created, location: @ticket
+    if params[:attendee_id] && params[:type_id] && params[:event_id]
+       @ticket = Ticket.new(attendee_id: params[:attendee_id], type_id: params[:type_id], event_id: params[:event_id])
+      if @ticket.save
+        render json: @ticket, status: :created
+      else
+        render json: @ticket.errors, status: :unprocessable_entity
+      end
     else
       render json: @ticket.errors, status: :unprocessable_entity
     end
   end
+  #attendee_id: params[:attendee_id], type_id: params[:type_id], event_id: params[:event_id]
 
   # PATCH/PUT /tickets/1
   def update

@@ -1,18 +1,21 @@
 class Event < ApplicationRecord
   mount_uploader :img, ImgUploader
+  before_save :titlecase
   belongs_to :category
-  validates :title, presence: true
-  validates :overview, presence: true
-  validates :event_date, presence: true
-  validates :start_datetime, presence: true
-  validates :end_datetime, presence: true
   has_many :types, dependent: :destroy
   has_many :tickets, dependent: :destroy
 
   accepts_nested_attributes_for :types
 
-  after_initialize :set_event_date
+  validates :title, presence: true, uniqueness: true, length: {minimum: 1, maximum: 280}
+  validates :overview, presence: true, length: {minimum: 1, maximum: 500}
+  validates :agenda, presence: true, length: {minimum: 1, maximum: 5000}
+  validates :event_date, presence: true
+  validates :start_datetime, presence: true
+  validates :end_datetime, presence: true
 
+  after_initialize :set_event_date
+  
 #  #filter
 #  def filter(date)
 #   filteredEvents = Event.where(start_datetime: date)
@@ -20,7 +23,7 @@ class Event < ApplicationRecord
   # sold tickets count
 
   def set_event_date
-    self.event_date = self.start_datetime.to_date
+    self.event_date = self.start_datetime.to_date unless self.start_datetime.nil?
   end
 
   def tickets_count
@@ -92,7 +95,11 @@ class Event < ApplicationRecord
     current_capacity = self.capacity
     available_ticket = current_capacity - sold_ticket
     return available_ticket
-end
+  end
+
+  def titlecase
+    self.title = self.title.titlecase
+  end
   
 
   # # Look into overriding default as_json implementation to return virtual attributes
