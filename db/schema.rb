@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180103150714) do
+ActiveRecord::Schema.define(version: 20180109200438) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "admin_activities", force: :cascade do |t|
+    t.bigint "admin_id"
+    t.bigint "event_id"
+    t.string "action", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["admin_id"], name: "index_admin_activities_on_admin_id"
+    t.index ["event_id"], name: "index_admin_activities_on_event_id"
+  end
 
   create_table "admins", force: :cascade do |t|
     t.string "f_name"
@@ -84,5 +94,7 @@ ActiveRecord::Schema.define(version: 20180103150714) do
     t.index ["event_id"], name: "index_types_on_event_id"
   end
 
+  add_foreign_key "admin_activities", "admins"
+  add_foreign_key "admin_activities", "events"
   add_foreign_key "events", "categories"
 end

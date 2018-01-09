@@ -25,17 +25,22 @@ class EventsController < ApplicationController
         revenues_per_month = event.revenues_per_month
         available = event.tickets_available
         category = event.get_category
+        total_revenues_per_month = Event.revenues_per_month
+        total_tickets_sold_per_month = Event.tickets_count_per_month
         hash = {
           tickets_available_per_event: available,
           tickets_sold: count,
           tickets_sold_per_month: count_per_month,
           revenues_per_month: revenues_per_month,
+          total_revenues_per_month_for_all_events: total_revenues_per_month,
+          total_tickets_sold_per_month_for_all_events: total_tickets_sold_per_month,
           data: event.as_json(include: {types: {only: [:name, :capacity, :price], methods: [:tickets_available_per_type, :tickets_sold_per_type, :tickets_sold_per_type_per_month, :revenues_per_type_per_month]}, category: {only: [:id, :name]}},
                                             except: [:category_id]
                                             )
         }
         display << hash
       end
+
       render json: display
   end
 
@@ -45,7 +50,7 @@ class EventsController < ApplicationController
   def show
     count = @event.tickets_count
     count_per_month = @event.tickets_count_per_month
-    revenues_per_month = event.revenues_per_month
+    revenues_per_month = @event.revenues_per_month
     available = @event.tickets_available
     category = @event.get_category
     display = {
@@ -116,7 +121,7 @@ class EventsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def event_params
-      params.require(:event).permit(:title, :overview, :agenda, :event_date, :start_datetime, :end_datetime, :duration, :category_id)
+      params.require(:event).permit(:title, :overview, :agenda, :event_date, :start_datetime, :end_datetime, :category_id)
     end
 end
 

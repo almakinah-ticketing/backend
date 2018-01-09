@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     post 'confirmations', to: 'admins#confirm', on: :collection
     post 'logins', to: 'admins#login', on: :collection
   end
+
   resources :charges
   resources :categories
 
@@ -23,8 +24,9 @@ Rails.application.routes.draw do
   # get 'find/events', :to =>  'events#filters'
   # get 'filter/events', :to =>  'events#double_filter'
   # match '/events/hottest', to: 'events#hot', via: :get
-  post '/payment', :to => 'charges#create'
-  post '/buy', :to => 'tickets#create'
+  post '/payment', to: 'charges#create'
+  post '/buy', to: 'tickets#create'
+  get '/admin_activities', to: 'admin_activities#index'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

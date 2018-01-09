@@ -4,6 +4,7 @@ class Event < ApplicationRecord
   belongs_to :category
   has_many :types, dependent: :destroy
   has_many :tickets, dependent: :destroy
+  has_many :admin_activities
 
   validates :title, presence: true, uniqueness: true, length: {minimum: 1, maximum: 280}
   validates :overview, presence: true, length: {minimum: 1, maximum: 500}
@@ -34,18 +35,67 @@ class Event < ApplicationRecord
     @parsed_counts
   end
 
-  def revenues_per_month
-    @types = self.types
-    @keys = @types[0].revenues_per_type_per_month.keys
-    @revenues_per_month = {}
-    # Figure out how to do nested loops or find alternative solution
-    @keys.each do |key| 
-        key = key.to_sym
-        for type in @types
-            revenues_per_month[key] += @types[i].revenues_per_type_per_month[key]
+  def self.tickets_count_per_month
+    events = Event.all
+    keys = events[0].revenues_per_month.keys
+     for event in events
+      if event.revenues_per_month.keys.length > keys.length
+        keys = event.revenues_per_month.keys
+      end
+    end
+    total_tickets_count_per_month = {}
+    for key in keys
+      key = key.to_sym
+      total_tickets_count_per_month[key] = 0
+      for event in events
+        if event.tickets_count_per_month[key]
+          total_tickets_count_per_month[key] += event.tickets_count_per_month[key]
         end
       end
-      @revenues_per_month
+    end
+    total_tickets_count_per_month
+  end
+
+  def revenues_per_month
+    types = self.types
+    keys = types[0].revenues_per_type_per_month.keys
+    for type in types
+      if type.revenues_per_type_per_month.keys.length > keys.length
+        keys = type.revenues_per_type_per_month.keys
+      end
+    end
+    revenues_per_month = {}
+    for key in keys 
+        key = key.to_sym
+        revenues_per_month[key] = 0
+        for type in types
+            revenues_per_month[key] += type.revenues_per_type_per_month[key]
+        end
+      end
+      revenues_per_month
+  end
+
+  def self.revenues_per_month
+    events = Event.all
+    keys = events[0].revenues_per_month.keys
+     for event in events
+      if event.revenues_per_month.keys.length > keys.length
+        keys = event.revenues_per_month.keys
+      end
+    end
+    total_revenues_per_month = {}
+    for key in keys
+      key = key.to_sym
+      total_revenues_per_month[key] = 0
+      for event in events
+        if event.revenues_per_month[key]
+          total_revenues_per_month[key] += event.revenues_per_month[key]
+        else
+          total_revenues_per_month[key] += 0
+        end
+      end
+    end
+    total_revenues_per_month
   end
 
   #remaining tickets
