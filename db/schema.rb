@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(version: 20180109091127) do
     t.integer "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "img"
+    t.string "img", null: false
     t.datetime "start_datetime", null: false
     t.datetime "end_datetime", null: false
     t.date "event_date", null: false

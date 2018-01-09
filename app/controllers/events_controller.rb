@@ -39,7 +39,7 @@ class EventsController < ApplicationController
     display = {
       tickets_available_per_event: available,
       tickets_sold: count,
-      data:@event.as_json(include: {types: {only: [:name, :capacity, :price], methods: :tickets_available_per_type}, category: {only: [:id, :name]}},
+      data:@event.as_json(include: {types: {only: [:name, :capacity, :price], methods: [:tickets_available_per_type, :tickets_sold_per_type]}, category: {only: [:id, :name]}},
                                           except: [:category_id]
                                           )
     }
