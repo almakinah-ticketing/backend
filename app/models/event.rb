@@ -1,10 +1,12 @@
 class Event < ApplicationRecord
+  mount_uploader :img, ImgUploader
   before_save :titlecase
-
   belongs_to :category
   has_many :types, dependent: :destroy
   has_many :tickets, dependent: :destroy
   has_many :admin_activities
+
+  accepts_nested_attributes_for :types
 
   validates :title, presence: true, uniqueness: true, length: {minimum: 1, maximum: 280}
   validates :overview, presence: true, length: {minimum: 1, maximum: 500}
@@ -12,12 +14,19 @@ class Event < ApplicationRecord
   validates :event_date, presence: true
   validates :start_datetime, presence: true
   validates :end_datetime, presence: true
+
+  after_initialize :set_event_date
   
 #  #filter
 #  def filter(date)
 #   filteredEvents = Event.where(start_datetime: date)
 #  end
   # sold tickets count
+
+  def set_event_date
+    self.event_date = self.start_datetime.to_date unless self.start_datetime.nil?
+  end
+
   def tickets_count
     # scope :of_event, -> (id) { where(event_id: id) }
     # from_db = self.type.find(params[:id])

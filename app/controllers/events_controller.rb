@@ -1,5 +1,6 @@
 class EventsController < ApplicationController
   before_action :set_event, only: [:show, :update, :destroy]
+
   # GET /events
   def index
       if params[:event_date] && params[:category_id]
@@ -43,8 +44,6 @@ class EventsController < ApplicationController
 
       render json: display
   end
-
-
 
   # GET /events/1
   def show
@@ -90,8 +89,10 @@ class EventsController < ApplicationController
   # POST /events
   def create
     @event = Event.new(event_params)
+    @event.types_attributes = JSON.parse(params[:event][:types_attributes])
+    @event.img = params[:file]
 
-    if @event.save
+    if @event.save!
       render json: @event, status: :created, location: @event
     else
       render json: @event.errors, status: :unprocessable_entity
@@ -135,7 +136,11 @@ class EventsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def event_params
+<<<<<<< HEAD
       params.require(:event).permit(:title, :overview, :agenda, :event_date, :start_datetime, :end_datetime, :category_id, :canceled)
+=======
+      params.require(:event).permit(:title, :img, :overview, :agenda, :start_datetime, :end_datetime, :category_id)
+>>>>>>> develop
     end
 end
 
@@ -158,7 +163,7 @@ end
 #   def all
 #     @events = Event.all
 #     render json: @events.as_json(include: {category: {only: [:name]}, types: {only: [:name, :capacity]}})
-#   end
+#   endformData.append("event[title]", title);
 
 
 # ##filter by date

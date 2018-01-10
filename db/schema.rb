@@ -36,6 +36,8 @@ ActiveRecord::Schema.define(version: 20180110104228) do
     t.string "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
+    t.string "invitation_token"
+    t.datetime "invited_at"
   end
 
   create_table "attendees", force: :cascade do |t|

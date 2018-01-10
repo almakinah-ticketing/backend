@@ -1,3 +1,4 @@
 tmp/pids/server.pid
 ./log/.fuse_hidden0002f9c200000010
 ./log/development.log
+./.byebug_history

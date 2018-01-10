@@ -19,29 +19,54 @@
     #     l_name: Faker::Name.last_name,
     #     email: Faker::Internet.email,
     #     phone_number: Faker::PhoneNumber.cell_phone,
-    #     password:"123456789"
+    #     password_digest:"123456789"
     # });
+    # category = Category.create!({
+    #     name: Faker::ProgrammingLanguage.unique.name,
+    #     img: Faker::LoremPixel.image
+    # });
+    # event = Event.create!({
+    #     title: Faker::Company.unique.name,
+    #     overview: Faker::Lorem.sentences,
+    #     agenda: Faker::Lorem.sentences,
+    #     event_date: "2018-01-08",
+    #     start_datetime:Faker::Time.between(Date.tomorrow, Date.tomorrow, :morning),
+    #     end_datetime:Faker::Time.between(Date.tomorrow, Date.tomorrow, :evening),
+    #     category_id: Faker::Number.between(1, 5),
+    #     img: Faker::LoremPixel.image
+    # });
+    # Ticket.create!({
+    #     # attendee_id: Faker::Number.between(1, 5),
+    #     attendee_id:1,
+    #     type_id: Faker::Number.between(1, 5),
+    #     event_id:Faker::Number.between(1, 5)
+    # });
+    puts 'CREATING CATEGORY...'
     category = Category.create!({
-        name: Faker::ProgrammingLanguage.unique.name[0...20],
+        name: Faker::ProgrammingLanguage.unique.name[0..20],
         img: Faker::LoremPixel.image
     });
+
+    puts 'CREATING EVENT...'
     event = Event.create!({
-        title: Faker::Company.unique.name[0...200],
+        title: Faker::Company.unique.name[0..200],
         overview: Faker::Lorem.sentences,
         agenda: Faker::Lorem.sentences,
-        event_date: "2018-01-11",
         start_datetime:Faker::Time.between(Date.tomorrow, Date.tomorrow, :morning),
         end_datetime:Faker::Time.between(Date.tomorrow, Date.tomorrow, :evening),
+        # category_id: Faker::Number.between(1, 5),
         category_id: category.id,
-        img: Faker::LoremPixel.image
+        img:  Rails.root.join("db/images/event.jpeg").open
+        # img: Faker::LoremPixel.image
     });
     # Ticket.create!({
     #     attendee_id: Faker::Number.between(1, 7),
     #     type_id: Faker::Number.between(1, 7),
     #     event_id:Faker::Number.between(1, 7)
     # });
+    puts 'CREATING TYPE...'
     Type.create!({
-        name: Faker::Company.unique.type[0...20],
+        name: Faker::Company.unique.type[0..20],
         price: Faker::Number.positive,
         capacity: Faker::Number.number(3),
         group_ticket_no: "1",
