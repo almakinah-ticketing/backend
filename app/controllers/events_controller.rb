@@ -101,7 +101,21 @@ class EventsController < ApplicationController
   # PATCH/PUT /events/1
   def update
     if @event.update(event_params)
-      render json: @event, status: :ok, location: @event
+      count = @event.tickets_count
+      count_per_month = @event.tickets_count_per_month
+      revenues_per_month = @event.revenues_per_month
+      available = @event.tickets_available
+      category = @event.get_category
+      display = {
+        tickets_available_per_event: available,
+        tickets_sold: count,
+        tickets_sold_per_month: count_per_month,
+        revenues_per_month: revenues_per_month,
+        data:@event.as_json(include: {types: {only: [:name, :capacity, :price], methods: [:tickets_available_per_type, :tickets_sold_per_type, :tickets_sold_per_type_per_month, :revenues_per_type_per_month]}, category: {only: [:id, :name]}},
+                                            except: [:category_id]
+                                            )
+      }
+      render json: display, status: :ok, location: @event
     else
       render json: @event.errors, status: :unprocessable_entity
     end
@@ -121,7 +135,7 @@ class EventsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def event_params
-      params.require(:event).permit(:title, :overview, :agenda, :event_date, :start_datetime, :end_datetime, :category_id)
+      params.require(:event).permit(:title, :overview, :agenda, :event_date, :start_datetime, :end_datetime, :category_id, :canceled)
     end
 end
 

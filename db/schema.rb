@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180109200438) do
+ActiveRecord::Schema.define(version: 20180110104228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 20180109200438) do
     t.datetime "start_datetime", null: false
     t.datetime "end_datetime", null: false
     t.date "event_date", null: false
+    t.boolean "canceled", default: false, null: false
     t.index ["category_id"], name: "index_events_on_category_id"
   end
 
@@ -97,4 +98,5 @@ ActiveRecord::Schema.define(version: 20180109200438) do
   add_foreign_key "admin_activities", "admins"
   add_foreign_key "admin_activities", "events"
   add_foreign_key "events", "categories"
+  add_foreign_key "types", "events"
 end

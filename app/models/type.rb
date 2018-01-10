@@ -2,7 +2,7 @@ class Type < ApplicationRecord
   belongs_to :event
   has_many :tickets, dependent: :destroy
 
-  validates :name, presence: true, uniqueness: true, length: {minimum: 1, maximum: 20}, format: {with: /[A-Z]+\w*/}
+  validates :name, presence: true, length: {minimum: 1, maximum: 20}, format: {with: /[A-Z]+\w*/}
   validates :price, presence: true, numericality: true
   validates :capacity, presence: true, numericality: true
 

@@ -22,14 +22,14 @@
     #     password:"123456789"
     # });
     category = Category.create!({
-        name: Faker::ProgrammingLanguage.unique.name,
+        name: Faker::ProgrammingLanguage.unique.name[0...20],
         img: Faker::LoremPixel.image
     });
     event = Event.create!({
-        title: Faker::Company.unique.name,
+        title: Faker::Company.unique.name[0...200],
         overview: Faker::Lorem.sentences,
         agenda: Faker::Lorem.sentences,
-        event_date: "2018-01-08",
+        event_date: "2018-01-11",
         start_datetime:Faker::Time.between(Date.tomorrow, Date.tomorrow, :morning),
         end_datetime:Faker::Time.between(Date.tomorrow, Date.tomorrow, :evening),
         category_id: category.id,
@@ -41,7 +41,7 @@
     #     event_id:Faker::Number.between(1, 7)
     # });
     Type.create!({
-        name: Faker::Company.unique.type,
+        name: Faker::Company.unique.type[0...20],
         price: Faker::Number.positive,
         capacity: Faker::Number.number(3),
         group_ticket_no: "1",

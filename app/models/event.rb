@@ -37,6 +37,8 @@ class Event < ApplicationRecord
 
   def self.tickets_count_per_month
     events = Event.all
+    # Find better way to get max and all keys instead of hardcoding them
+    keys = ["Jan 2018", "Feb 2018", "Mar 2018", "Apr 2018", "May 2018", "Jun 2018", "Jul 2018", "Aug 2018", "Sep 2018", "Oct 2018", "Nov 2018", "Dec 2018"]
     keys = events[0].revenues_per_month.keys
      for event in events
       if event.revenues_per_month.keys.length > keys.length
@@ -58,18 +60,24 @@ class Event < ApplicationRecord
 
   def revenues_per_month
     types = self.types
-    keys = types[0].revenues_per_type_per_month.keys
-    for type in types
-      if type.revenues_per_type_per_month.keys.length > keys.length
-        keys = type.revenues_per_type_per_month.keys
-      end
-    end
+    # Find better way to get max and all keys instead of hardcoding them
+    keys = ["Jan 2018", "Feb 2018", "Mar 2018", "Apr 2018", "May 2018", "Jun 2018", "Jul 2018", "Aug 2018", "Sep 2018", "Oct 2018", "Nov 2018", "Dec 2018"]
+    # keys = types[0].revenues_per_type_per_month.keys
+    # for type in types
+    #   if type.revenues_per_type_per_month.keys.length > keys.length
+    #     keys = type.revenues_per_type_per_month.keys
+    #   end
+    # end
     revenues_per_month = {}
     for key in keys 
         key = key.to_sym
         revenues_per_month[key] = 0
         for type in types
+          if type.revenues_per_type_per_month[key]
             revenues_per_month[key] += type.revenues_per_type_per_month[key]
+          else
+            revenues_per_month[key] = 0
+          end
         end
       end
       revenues_per_month
@@ -77,12 +85,14 @@ class Event < ApplicationRecord
 
   def self.revenues_per_month
     events = Event.all
-    keys = events[0].revenues_per_month.keys
-     for event in events
-      if event.revenues_per_month.keys.length > keys.length
-        keys = event.revenues_per_month.keys
-      end
-    end
+    # Find better way to get max and all keys instead of hardcoding them
+    keys = ["Jan 2018", "Feb 2018", "Mar 2018", "Apr 2018", "May 2018", "Jun 2018", "Jul 2018", "Aug 2018", "Sep 2018", "Oct 2018", "Nov 2018", "Dec 2018"]
+    # keys = events[0].revenues_per_month.keys
+    #  for event in events
+    #   if event.revenues_per_month.keys.length > keys.length
+    #     keys = event.revenues_per_month.keys
+    #   end
+    # end
     total_revenues_per_month = {}
     for key in keys
       key = key.to_sym
