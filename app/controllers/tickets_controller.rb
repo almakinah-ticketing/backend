@@ -12,15 +12,10 @@ class TicketsController < ApplicationController
   def show
     render json: @ticket
   end
-  #payment
-  def payment
-    redirect_to controller: 'charges', action: 'create', event_id: @event_id
-    render json: @ticket , status: :payment
-  end
   # POST /tickets
   def create
-    if params[:attendee_id] && params[:type_id] && params[:event_id]
-       @ticket = Ticket.new(attendee_id: params[:attendee_id], type_id: params[:type_id], event_id: params[:event_id])
+    if current_attendee && params[:type_id] && params[:event_id]
+       @ticket = Ticket.new(attendee_id: current_attendee.id, type_id: params[:type_id], event_id: params[:event_id])
       if @ticket.save
         render json: @ticket, status: :created
       else
@@ -30,7 +25,6 @@ class TicketsController < ApplicationController
       render json: @ticket.errors, status: :unprocessable_entity
     end
   end
-  #attendee_id: params[:attendee_id], type_id: params[:type_id], event_id: params[:event_id]
 
   # PATCH/PUT /tickets/1
   def update
