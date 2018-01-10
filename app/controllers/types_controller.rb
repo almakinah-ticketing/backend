@@ -18,7 +18,7 @@ class TypesController < ApplicationController
     @type = Type.new(type_params)
 
     if @type.save
-      render json: @type, status: :created, location: @type
+      render json: @type, status: :created
     else
       render json: @type.errors, status: :unprocessable_entity
     end
