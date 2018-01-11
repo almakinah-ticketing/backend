@@ -6,6 +6,7 @@ class ChargesController < ApplicationController
 
   def create
     
+    # x =params[:charge][:stripeToken].replace('tok', 'ch')
     stripeToken = params[:stripeToken]
     amount = (params[:amount] * 100).to_i
       charge = Stripe::Charge.create(
@@ -14,5 +15,8 @@ class ChargesController < ApplicationController
         :description => 'Almakinah Ticket customer',
         :currency    => 'EGP'
       )
+    # if charge.status == 'success'
+    #   charge.id
+    # end
   end
 end
