@@ -46,6 +46,7 @@ class EventsController < ApplicationController
     render json: display
   end
 
+ 
   
   # #events sorted according to hottest status
   # def hottest
@@ -95,6 +96,16 @@ class EventsController < ApplicationController
     @event.destroy
     render body: nil, status: :no_content
   end
+
+  def history
+    if current_attendee
+      @events = Event.history_titles(current_attendee.id)
+      render json: @events
+    else
+      render json: @events.errors, status: :unprocessable_entity
+    end
+  end
+
 
    private
     # Use callbacks to share common setup or constraints between actions.

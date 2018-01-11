@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   # get 'filter/events', :to =>  'events#double_filter'
   # match '/events/hottest', to: 'events#hot', via: :get
   post '/buy', :to => 'tickets#create'
+  get '/history', :to => 'events#history'
 
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

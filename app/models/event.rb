@@ -15,6 +15,8 @@ class Event < ApplicationRecord
   validates :end_datetime, presence: true
 
   after_initialize :set_event_date
+
+  scope :history_titles, -> (attendee_id) { joins(:tickets).where('tickets.attendee_id = ?', attendee_id).pluck(:title) }
   
 #  #filter
 #  def filter(date)
