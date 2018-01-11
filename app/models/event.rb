@@ -1,10 +1,14 @@
-class Event < ApplicationRecord  
+class Event < ApplicationRecord
+  mount_uploader :img, ImgUploader
+  before_save :titlecase
   belongs_to :category
   has_many :types, dependent: :destroy
   has_many :tickets, dependent: :destroy
   has_many :admin_activities
 
   accepts_nested_attributes_for :types, allow_destroy: true
+
+  accepts_nested_attributes_for :types
 
   validates :title, presence: true, uniqueness: true, length: {minimum: 1, maximum: 280}
   validates :overview, presence: true, length: {minimum: 1, maximum: 500}
@@ -13,8 +17,6 @@ class Event < ApplicationRecord
   validates :start_datetime, presence: true
   validates :end_datetime, presence: true
 
-  mount_uploader :img, ImgUploader
-  before_save :titlecase
   after_initialize :set_event_date
 
   scope :filter_by_title, -> (title) { where('title LIKE ?', "%#{title}%") }

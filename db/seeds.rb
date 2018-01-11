@@ -43,7 +43,7 @@
     # });
     puts 'CREATING CATEGORY...'
     category = Category.create!({
-        name: Faker::ProgrammingLanguage.unique.name[0..20],
+        name: Faker::ProgrammingLanguage.unique.name[0..15],
         img: Faker::LoremPixel.image
     });
 
@@ -57,7 +57,6 @@
         # category_id: Faker::Number.between(1, 5),
         category_id: category.id,
         img:  Rails.root.join("db/images/event.jpeg").open
-        # img: Faker::LoremPixel.image
     });
     # Ticket.create!({
     #     attendee_id: Faker::Number.between(1, 7),
