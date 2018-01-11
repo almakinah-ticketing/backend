@@ -12,7 +12,8 @@ class AdminActivitiesController < ApplicationController
     @admin_activity = AdminActivity.new(admin_activity_params)
 
     if @admin_activity.save
-      render json: @admin_activity, status: :created, location: @admin_activity
+      @admin_activities = AdminActivity.all
+      render json: @admin_activities, status: :created
     else
       render json: @admin_activity.errors, status: :unprocessable_entity
     end

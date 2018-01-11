@@ -6,7 +6,7 @@ class Event < ApplicationRecord
   has_many :tickets, dependent: :destroy
   has_many :admin_activities
 
-  accepts_nested_attributes_for :types
+  accepts_nested_attributes_for :types, allow_destroy: true
 
   validates :title, presence: true, uniqueness: true, length: {minimum: 1, maximum: 280}
   validates :overview, presence: true, length: {minimum: 1, maximum: 500}
@@ -35,29 +35,36 @@ class Event < ApplicationRecord
     Ticket.where(event_id: self.id).count
   end
 
+  # TODO: OPTIMIZE
   def tickets_count_per_month
+    # .group() returns [{<datetime>: <count_value>}]
     @counts = Ticket.where(event_id: self.id).group("DATE_TRUNC('month', created_at)").count
     @parsed_counts = {}
+    # looping over array returned by .group() to change key format from <datetime> to <month> <year>, eg. "Jan 2018"
     @counts.each do |m|
       @parsed_counts.reverse_merge!({"#{m[0].strftime("%b %Y")}": m[1]})
     end
     @parsed_counts
   end
 
+  # TODO: OPTIMIZE
   def self.tickets_count_per_month
     events = Event.all
-    # Find better way to get max and all keys instead of hardcoding them
+    # TODO: Find better way to get max and all keys instead of hardcoding them
     keys = ["Jan 2018", "Feb 2018", "Mar 2018", "Apr 2018", "May 2018", "Jun 2018", "Jul 2018", "Aug 2018", "Sep 2018", "Oct 2018", "Nov 2018", "Dec 2018"]
     keys = events[0].revenues_per_month.keys
-     for event in events
-      if event.revenues_per_month.keys.length > keys.length
-        keys = event.revenues_per_month.keys
-      end
-    end
+    # # old way of getting keys instead of hardcoding them but only gets keys from event with most keys --> might not necessarily be a combination of all months
+    # for event in events
+    #   if event.revenues_per_month.keys.length > keys.length
+    #     keys = event.revenues_per_month.keys
+    #   end
+    # end
     total_tickets_count_per_month = {}
+    # looping over keys to turn each key to a symbol and initialize count per month for that key to 0
     for key in keys
       key = key.to_sym
       total_tickets_count_per_month[key] = 0
+      # looping over events to add ticket count for each event, if it exists, to total counts
       for event in events
         if event.tickets_count_per_month[key]
           total_tickets_count_per_month[key] += event.tickets_count_per_month[key]
@@ -67,9 +74,10 @@ class Event < ApplicationRecord
     total_tickets_count_per_month
   end
 
+  # TODO: OPTIMIZE
   def revenues_per_month
     types = self.types
-    # Find better way to get max and all keys instead of hardcoding them
+    # TODO: Find better way to get max and all keys instead of hardcoding them
     keys = ["Jan 2018", "Feb 2018", "Mar 2018", "Apr 2018", "May 2018", "Jun 2018", "Jul 2018", "Aug 2018", "Sep 2018", "Oct 2018", "Nov 2018", "Dec 2018"]
     # keys = types[0].revenues_per_type_per_month.keys
     # for type in types
@@ -92,9 +100,10 @@ class Event < ApplicationRecord
       revenues_per_month
   end
 
+  # TODO: OPTIMIZE
   def self.revenues_per_month
     events = Event.all
-    # Find better way to get max and all keys instead of hardcoding them
+    # TODO: Find better way to get max and all keys instead of hardcoding them
     keys = ["Jan 2018", "Feb 2018", "Mar 2018", "Apr 2018", "May 2018", "Jun 2018", "Jul 2018", "Aug 2018", "Sep 2018", "Oct 2018", "Nov 2018", "Dec 2018"]
     # keys = events[0].revenues_per_month.keys
     #  for event in events

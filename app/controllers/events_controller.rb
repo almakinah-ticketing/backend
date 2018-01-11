@@ -41,7 +41,6 @@ class EventsController < ApplicationController
         }
         display << hash
       end
-
       render json: display
   end
 
@@ -57,7 +56,7 @@ class EventsController < ApplicationController
       tickets_sold: count,
       tickets_sold_per_month: count_per_month,
       revenues_per_month: revenues_per_month,
-      data:@event.as_json(include: {types: {only: [:name, :capacity, :price], methods: [:tickets_available_per_type, :tickets_sold_per_type, :tickets_sold_per_type_per_month, :revenues_per_type_per_month]}, category: {only: [:id, :name]}},
+      data:@event.as_json(include: {types: {only: [:id, :name, :capacity, :price], methods: [:tickets_available_per_type, :tickets_sold_per_type, :tickets_sold_per_type_per_month, :revenues_per_type_per_month]}, category: {only: [:id, :name]}},
                                           except: [:category_id]
                                           )
     }
@@ -91,9 +90,22 @@ class EventsController < ApplicationController
     @event = Event.new(event_params)
     @event.types_attributes = JSON.parse(params[:event][:types_attributes])
     @event.img = params[:file]
-
+    count = @event.tickets_count
+    count_per_month = @event.tickets_count_per_month
+    revenues_per_month = @event.revenues_per_month
+    available = @event.tickets_available
+    category = @event.get_category
     if @event.save!
-      render json: @event, status: :created, location: @event
+      display = {
+        tickets_available_per_event: available,
+        tickets_sold: count,
+        tickets_sold_per_month: count_per_month,
+        revenues_per_month: revenues_per_month,
+        data:@event.as_json(include: {types: {only: [:name, :capacity, :price], methods: [:tickets_available_per_type, :tickets_sold_per_type, :tickets_sold_per_type_per_month, :revenues_per_type_per_month]}, category: {only: [:id, :name]}},
+                                            except: [:category_id]
+                                            )
+      }
+      render json: display, status: :created, location: @event
     else
       render json: @event.errors, status: :unprocessable_entity
     end
@@ -101,7 +113,11 @@ class EventsController < ApplicationController
 
   # PATCH/PUT /events/1
   def update
-    if @event.update(event_params)
+    cloned_params = event_params.clone
+    if params[:event][:types_attributes]
+      cloned_params[:types_attributes] = JSON.parse(params[:event][:types_attributes])
+    end
+    if @event.update!(cloned_params)
       count = @event.tickets_count
       count_per_month = @event.tickets_count_per_month
       revenues_per_month = @event.revenues_per_month
@@ -136,11 +152,7 @@ class EventsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def event_params
-<<<<<<< HEAD
-      params.require(:event).permit(:title, :overview, :agenda, :event_date, :start_datetime, :end_datetime, :category_id, :canceled)
-=======
-      params.require(:event).permit(:title, :img, :overview, :agenda, :start_datetime, :end_datetime, :category_id)
->>>>>>> develop
+      params.require(:event).permit(:title, :overview, :agenda, :event_date, :start_datetime, :end_datetime, :category_id, :canceled, :img)
     end
 end
 

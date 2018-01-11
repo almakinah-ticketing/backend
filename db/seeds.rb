@@ -66,7 +66,7 @@
     # });
     puts 'CREATING TYPE...'
     Type.create!({
-        name: Faker::Company.unique.type[0..20],
+        name: Faker::Company.unique.type[0..15],
         price: Faker::Number.positive,
         capacity: Faker::Number.number(3),
         group_ticket_no: "1",
