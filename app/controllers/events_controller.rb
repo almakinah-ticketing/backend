@@ -9,6 +9,8 @@ class EventsController < ApplicationController
         @events = Event.where(event_date: params[:event_date]).order('start_datetime ASC')
       elsif params[:category_id]
         @events = Event.where(category_id: params[:category_id]).order('start_datetime ASC')
+      elsif params[:title]
+        @events = Event.filter_by_title(params[:title].titlecase)
       elsif params[:popularity]
         if params[:popularity] == 'desc'
           @events = Event.all.sort_by(&:tickets_count).reverse

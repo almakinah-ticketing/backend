@@ -1,6 +1,4 @@
-class Event < ApplicationRecord
-  mount_uploader :img, ImgUploader
-  before_save :titlecase
+class Event < ApplicationRecord  
   belongs_to :category
   has_many :types, dependent: :destroy
   has_many :tickets, dependent: :destroy
@@ -15,8 +13,12 @@ class Event < ApplicationRecord
   validates :start_datetime, presence: true
   validates :end_datetime, presence: true
 
+  mount_uploader :img, ImgUploader
+  before_save :titlecase
   after_initialize :set_event_date
-  
+
+  scope :filter_by_title, -> (title) { where('title LIKE ?', "%#{title}%") }
+
 #  #filter
 #  def filter(date)
 #   filteredEvents = Event.where(start_datetime: date)
@@ -193,7 +195,6 @@ class Event < ApplicationRecord
   def titlecase
     self.title = self.title.titlecase
   end
-  
 
   # # Look into overriding default as_json implementation to return virtual attributes
   # def as_json(options = { })
