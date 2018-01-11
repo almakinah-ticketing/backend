@@ -1,5 +1,6 @@
 class EventsController < ApplicationController
   before_action :set_event, only: [:show, :update, :destroy]
+
   # GET /events
   def index
       if params[:event_date] && params[:category_id]
@@ -8,6 +9,14 @@ class EventsController < ApplicationController
         @events = Event.where(event_date: params[:event_date]).order('start_datetime ASC')
       elsif params[:category_id]
         @events = Event.where(category_id: params[:category_id]).order('start_datetime ASC')
+      elsif params[:title]
+        @events = Event.filter_by_title(params[:title].titlecase)
+      elsif params[:popularity]
+        if params[:popularity] == 'desc'
+          @events = Event.all.sort_by(&:tickets_count).reverse
+        elsif params[:popularity] == 'asc'
+          @events = Event.all.sort_by(&:tickets_count)
+        end
       else
         @events = Event.all.order('start_datetime ASC')
       end
@@ -15,12 +24,20 @@ class EventsController < ApplicationController
       display = []
       @events.each do |event|
         count = event.tickets_count
+        count_per_month = event.tickets_count_per_month
+        revenues_per_month = event.revenues_per_month
         available = event.tickets_available
         category = event.get_category
+        total_revenues_per_month = Event.revenues_per_month
+        total_tickets_sold_per_month = Event.tickets_count_per_month
         hash = {
           tickets_available_per_event: available,
           tickets_sold: count,
-          data: event.as_json(include: {types: {only: [:name, :capacity], methods: :tickets_available_per_type}, category: {only: [:id, :name]}},
+          tickets_sold_per_month: count_per_month,
+          revenues_per_month: revenues_per_month,
+          total_revenues_per_month_for_all_events: total_revenues_per_month,
+          total_tickets_sold_per_month_for_all_events: total_tickets_sold_per_month,
+          data: event.as_json(include: {types: {only: [:name, :capacity, :price], methods: [:tickets_available_per_type, :tickets_sold_per_type, :tickets_sold_per_type_per_month, :revenues_per_type_per_month]}, category: {only: [:id, :name]}},
                                             except: [:category_id]
                                             )
         }
@@ -29,17 +46,19 @@ class EventsController < ApplicationController
       render json: display
   end
 
-
-
   # GET /events/1
   def show
     count = @event.tickets_count
+    count_per_month = @event.tickets_count_per_month
+    revenues_per_month = @event.revenues_per_month
     available = @event.tickets_available
     category = @event.get_category
     display = {
       tickets_available_per_event: available,
       tickets_sold: count,
-      data:@event.as_json(include: {types: {only: [:name, :capacity, :price], methods: [:tickets_available_per_type, :tickets_sold_per_type]}, category: {only: [:id, :name]}},
+      tickets_sold_per_month: count_per_month,
+      revenues_per_month: revenues_per_month,
+      data:@event.as_json(include: {types: {only: [:id, :name, :capacity, :price], methods: [:tickets_available_per_type, :tickets_sold_per_type, :tickets_sold_per_type_per_month, :revenues_per_type_per_month]}, category: {only: [:id, :name]}},
                                           except: [:category_id]
                                           )
     }
@@ -74,9 +93,22 @@ class EventsController < ApplicationController
     @event = Event.new(event_params)
     @event.types_attributes = JSON.parse(params[:event][:types_attributes])
     @event.img = params[:file]
-
+    count = @event.tickets_count
+    count_per_month = @event.tickets_count_per_month
+    revenues_per_month = @event.revenues_per_month
+    available = @event.tickets_available
+    category = @event.get_category
     if @event.save!
-      render json: @event, status: :created, location: @event
+      display = {
+        tickets_available_per_event: available,
+        tickets_sold: count,
+        tickets_sold_per_month: count_per_month,
+        revenues_per_month: revenues_per_month,
+        data:@event.as_json(include: {types: {only: [:name, :capacity, :price], methods: [:tickets_available_per_type, :tickets_sold_per_type, :tickets_sold_per_type_per_month, :revenues_per_type_per_month]}, category: {only: [:id, :name]}},
+                                            except: [:category_id]
+                                            )
+      }
+      render json: display, status: :created, location: @event
     else
       render json: @event.errors, status: :unprocessable_entity
     end
@@ -84,8 +116,26 @@ class EventsController < ApplicationController
 
   # PATCH/PUT /events/1
   def update
-    if @event.update(event_params)
-      render json: @event, status: :ok, location: @event
+    cloned_params = event_params.clone
+    if params[:event][:types_attributes]
+      cloned_params[:types_attributes] = JSON.parse(params[:event][:types_attributes])
+    end
+    if @event.update!(cloned_params)
+      count = @event.tickets_count
+      count_per_month = @event.tickets_count_per_month
+      revenues_per_month = @event.revenues_per_month
+      available = @event.tickets_available
+      category = @event.get_category
+      display = {
+        tickets_available_per_event: available,
+        tickets_sold: count,
+        tickets_sold_per_month: count_per_month,
+        revenues_per_month: revenues_per_month,
+        data:@event.as_json(include: {types: {only: [:name, :capacity, :price], methods: [:tickets_available_per_type, :tickets_sold_per_type, :tickets_sold_per_type_per_month, :revenues_per_type_per_month]}, category: {only: [:id, :name]}},
+                                            except: [:category_id]
+                                            )
+      }
+      render json: display, status: :ok, location: @event
     else
       render json: @event.errors, status: :unprocessable_entity
     end
@@ -115,7 +165,7 @@ class EventsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def event_params
-      params.require(:event).permit(:title, :img, :overview, :agenda, :start_datetime, :end_datetime, :category_id)
+      params.require(:event).permit(:title, :overview, :agenda, :event_date, :start_datetime, :end_datetime, :category_id, :canceled, :img)
     end
 end
 

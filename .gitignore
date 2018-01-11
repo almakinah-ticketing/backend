@@ -1,0 +1,6 @@
+.rspec
+/log/*.log
+/tmp
+/public/uploads
+.fuse*
+.byebug_history

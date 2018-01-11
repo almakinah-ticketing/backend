@@ -3,6 +3,7 @@ class Admin < ApplicationRecord
   include Confirmable
 
   has_many :events, dependent: :destroy
+  has_many :admin_activities
 
     def invite!
 	    payload = "#{Time.now.to_i}.#{Random.new.rand(1000)}.#{Rails.application.secrets.secret_key_base}"
@@ -17,5 +18,4 @@ class Admin < ApplicationRecord
     params[:invitation_token] = nil
     self.update params
   end
-
 end

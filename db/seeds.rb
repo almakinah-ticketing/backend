@@ -49,7 +49,7 @@
 
     puts 'CREATING EVENT...'
     event = Event.create!({
-        title: Faker::Company.unique.name[0..15],
+        title: Faker::Company.unique.name[0..200],
         overview: Faker::Lorem.sentences,
         agenda: Faker::Lorem.sentences,
         start_datetime:Faker::Time.between(Date.tomorrow, Date.tomorrow, :morning),
@@ -57,9 +57,6 @@
         # category_id: Faker::Number.between(1, 5),
         category_id: category.id,
         img:  Rails.root.join("db/images/event.jpeg").open
-       
-        # img: Faker::LoremPixel.image
-
     });
     # Ticket.create!({
     #     attendee_id: Faker::Number.between(1, 7),
