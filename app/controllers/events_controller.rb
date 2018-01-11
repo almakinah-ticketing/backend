@@ -21,6 +21,8 @@ class EventsController < ApplicationController
         @events = Event.all.order('start_datetime ASC')
       end
       # typeTicketsavailable = @events.map(&:tickets_type)
+      total_revenues_per_month = Event.revenues_per_month
+      total_tickets_sold_per_month = Event.tickets_count_per_month
       display = []
       @events.each do |event|
         count = event.tickets_count
@@ -28,8 +30,6 @@ class EventsController < ApplicationController
         revenues_per_month = event.revenues_per_month
         available = event.tickets_available
         category = event.get_category
-        total_revenues_per_month = Event.revenues_per_month
-        total_tickets_sold_per_month = Event.tickets_count_per_month
         hash = {
           tickets_available_per_event: available,
           tickets_sold: count,
