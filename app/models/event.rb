@@ -19,6 +19,8 @@ class Event < ApplicationRecord
 
   after_initialize :set_event_date
 
+  scope :history_titles, -> (attendee_id) { joins(:tickets).where('tickets.attendee_id = ?', attendee_id).pluck(:title) }
+  
   scope :filter_by_title, -> (title) { where('title LIKE ?', "%#{title}%") }
 
 #  #filter

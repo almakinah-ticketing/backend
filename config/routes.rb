@@ -26,10 +26,8 @@ Rails.application.routes.draw do
   # get 'find/events', :to =>  'events#filters'
   # get 'filter/events', :to =>  'events#double_filter'
   # match '/events/hottest', to: 'events#hot', via: :get
-  # get '/admin_activities', to: 'admin_activities#index'
-  # post '/admin_activities', to: 'admin_activities#create'
-
   post '/buy', :to => 'tickets#create'
+  get '/history', :to => 'events#history'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
