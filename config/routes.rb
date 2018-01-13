@@ -28,6 +28,9 @@ Rails.application.routes.draw do
   # match '/events/hottest', to: 'events#hot', via: :get
   post '/buy', :to => 'tickets#create'
   get '/history', :to => 'events#history'
+  get '/prices', :to => 'types#history'
+  post '/refund', :to => 'charges#refund'
+  get '/calendar', :to => 'events#calendar'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

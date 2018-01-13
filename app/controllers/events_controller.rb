@@ -21,6 +21,8 @@ class EventsController < ApplicationController
         @events = Event.all.order('start_datetime ASC')
       end
       # typeTicketsavailable = @events.map(&:tickets_type)
+      total_revenues_per_month = Event.revenues_per_month
+      total_tickets_sold_per_month = Event.tickets_count_per_month
       display = []
       @events.each do |event|
         count = event.tickets_count
@@ -28,8 +30,6 @@ class EventsController < ApplicationController
         revenues_per_month = event.revenues_per_month
         available = event.tickets_available
         category = event.get_category
-        total_revenues_per_month = Event.revenues_per_month
-        total_tickets_sold_per_month = Event.tickets_count_per_month
         hash = {
           tickets_available_per_event: available,
           tickets_sold: count,
@@ -149,11 +149,40 @@ class EventsController < ApplicationController
 
   def history
     if current_attendee
-      @events = Event.history_titles(current_attendee.id)
-      render json: @events
+      @events = Event.history_titles(current_attendee.id).reverse
+      @type = Type.history_price(current_attendee.id).reverse
+      @ticket = Ticket.history_charge(current_attendee.id).reverse
+      view = []
+      size = @events.length
+      i = 0
+      while i< size do
+        # view[i] = @events[i] + " for the price of " + @type[i].to_s + " EGP"
+        view[i] = [event: @events[i] , price: @type[i] , charge: @ticket[i]]
+        i+=1
+     end
+
+      render json: view
     else
       render json: @events.errors, status: :unprocessable_entity
     end
+  end
+  def calendar
+    if current_attendee
+     @events = Event.calender_data(current_attendee.id)
+    view = []
+    size = @events.length
+      i = 0
+      j = 0
+      while i< size do
+        while j < 3
+        view[i] = [title: @events[i][j] , start: @events[i][j+1] , end: @events[i][j+2]]
+        i+=1
+      end
+     end
+    render json: view
+  else
+    render json: @events.errors, status: :unprocessable_entity
+  end
   end
 
 

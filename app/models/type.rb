@@ -36,4 +36,6 @@ class Type < ApplicationRecord
     end
     return @parsed_revenues
   end
+
+  scope :history_price, -> (attendee_id) { joins(:tickets).where('tickets.attendee_id=?',attendee_id).pluck(:price)}
 end
