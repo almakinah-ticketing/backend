@@ -5,6 +5,7 @@ class Event < ApplicationRecord
   has_many :types, dependent: :destroy
   has_many :tickets, dependent: :destroy
   has_many :admin_activities
+  has_many :attendees, through: :tickets
 
   accepts_nested_attributes_for :types, allow_destroy: true
 
@@ -18,9 +19,9 @@ class Event < ApplicationRecord
   validates :end_datetime, presence: true
 
   after_initialize :set_event_date
+  after_update :send_emails
 
   scope :history_titles, -> (attendee_id) { joins(:tickets).where('tickets.attendee_id = ?', attendee_id).pluck(:title) }
-  
   scope :filter_by_title, -> (title) { where('title LIKE ?', "%#{title}%") }
 
 #  #filter
@@ -31,6 +32,15 @@ class Event < ApplicationRecord
 
   def set_event_date
     self.event_date = self.start_datetime.to_date unless self.start_datetime.nil?
+  end
+
+  def send_emails
+    puts "hamadaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    puts "number of attendees: #{self.attendees.count}"
+    self.attendees.each do |attendee|
+      puts "heeeeeeeeeeeeeeeeeey#{attendee.email}"
+      UpdatesMailer.updates_mail(attendee.email, self).deliver_now
+    end
   end
 
   def tickets_count

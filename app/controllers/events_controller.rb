@@ -135,10 +135,18 @@ class EventsController < ApplicationController
                                             except: [:category_id]
                                             )
       }
+      
       render json: display, status: :ok, location: @event
     else
       render json: @event.errors, status: :unprocessable_entity
     end
+
+
+      # if @event.update
+      #   UpdatesMailer.updates_mail(@event).deliver
+      #   format.html { redirect_to @event, notice: 'Post was successfully created.' }
+      # end
+    # if @event.send_mail
   end
 
   # DELETE /events/1
