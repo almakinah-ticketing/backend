@@ -168,18 +168,17 @@ class EventsController < ApplicationController
   end
   def calendar
     if current_attendee
-     @events = Event.calender_data(current_attendee.id)
+     @events = Event.history_titles(current_attendee.id)
+     @events1 = Event.calender_sdate(current_attendee.id)
+     @events2 = Event.calender_edate(current_attendee.id)
     view = []
     size = @events.length
       i = 0
-      j = 0
       while i< size do
-        while j < 3
-        view[i] = [title: @events[i][j] , start: @events[i][j+1] , end: @events[i][j+2]]
+        view[i] = {title: @events[i] , start: @events1[i] , end: @events2[i]}
         i+=1
-      end
      end
-    render json: view
+    render json: view.take(10)
   else
     render json: @events.errors, status: :unprocessable_entity
   end
