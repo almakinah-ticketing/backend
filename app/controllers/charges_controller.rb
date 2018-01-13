@@ -1,22 +1,33 @@
 class ChargesController < ApplicationController
 
   def new
-    @event_id = params[:event_id]
   end
-
   def create
-    
-    # x =params[:charge][:stripeToken].replace('tok', 'ch')
     stripeToken = params[:stripeToken]
     amount = (params[:amount] * 100).to_i
-      charge = Stripe::Charge.create(
-        :source  => stripeToken,
-        :amount      => amount,
-        :description => 'Almakinah Ticket customer',
-        :currency    => 'EGP'
+    attendee_id = params[:attendee_id]
+    type_id = params[:type_id]
+    type_ids = params[:type_ids]
+    event_id = params[:event_id]
+    charge = Stripe::Charge.create(
+      :source  => stripeToken,
+      :amount      => amount,
+      :description => 'Almakinah Ticket customer',
+      :currency    => 'EGP'
       )
-    # if charge.status == 'success'
-    #   charge.id
-    # end
+      ch = charge.id
+    if charge.status == 'succeeded'
+      type_ids.each do |type|
+        ticket = Ticket.new(attendee_id: attendee_id, type_id: type, event_id: event_id, charge: ch)
+        ticket.save
+      end
+    end
+  end
+
+  def refund
+    ch_token = params[:charge]
+    re = Stripe::Refund.create(
+        charge: ch_token
+        )
   end
 end
