@@ -20,6 +20,7 @@ class Event < ApplicationRecord
   after_initialize :set_event_date
 
   scope :history_titles, -> (attendee_id) { joins(:tickets).where('tickets.attendee_id = ?', attendee_id).pluck(:title) }
+  scope :calender_titles, -> (attendee_id) { joins(:tickets).where('tickets.attendee_id = ?', attendee_id).distinct.pluck(:title) }  
   scope :calender_sdate, -> (attendee_id) {joins(:tickets).where('tickets.attendee_id = ?', attendee_id).pluck(:start_datetime)}
   scope :calender_edate, -> (attendee_id) {joins(:tickets).where('tickets.attendee_id = ?', attendee_id).pluck(:end_datetime)}
   # scope :calender_title, -> (attendee_id) {joins(:tickets).where('tickets.attendee_id = ?', attendee_id).pluck(:title,:start_datetime,:end_datetime)}
