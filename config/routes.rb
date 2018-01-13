@@ -4,10 +4,18 @@ Rails.application.routes.draw do
     post 'confirmations', to: 'attendees#confirm', on: :collection
     post 'logins', to: 'attendees#login', on: :collection
   end
+  post 'admin/invitations', to: 'admin_invitation#invitation'
 
   resources :admins do
     post 'confirmations', to: 'admins#confirm', on: :collection
     post 'logins', to: 'admins#login', on: :collection
+
+
+
+    collection do
+      get 'registration/:invitation_token', to: 'invited_admin_registration#show'
+    end
+    patch 'registration', to: 'invited_admin_registration#update'
   end
 
   resources :admin_activities, only: [:index, :create]
