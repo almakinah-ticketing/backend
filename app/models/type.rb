@@ -38,4 +38,6 @@ class Type < ApplicationRecord
   end
 
   scope :history_price, -> (attendee_id) { joins(:tickets).where('tickets.attendee_id=?',attendee_id).pluck(:price)}
+  scope :history_type, -> (attendee_id) { joins(:tickets).where('tickets.attendee_id=?',attendee_id).pluck(:name)}
+  
 end

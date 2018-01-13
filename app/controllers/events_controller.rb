@@ -152,12 +152,13 @@ class EventsController < ApplicationController
       @events = Event.history_titles(current_attendee.id).reverse
       @type = Type.history_price(current_attendee.id).reverse
       @ticket = Ticket.history_charge(current_attendee.id).reverse
+      @type1 = Type.history_type(current_attendee.id).reverse
       view = []
       size = @events.length
       i = 0
       while i< size do
         # view[i] = @events[i] + " for the price of " + @type[i].to_s + " EGP"
-        view[i] = [event: @events[i] , price: @type[i] , charge: @ticket[i]]
+        view[i] = [event: @events[i] , price: @type[i] , charge: @ticket[i], type: @type1[i]]
         i+=1
      end
 
@@ -168,7 +169,7 @@ class EventsController < ApplicationController
   end
   def calendar
     if current_attendee
-     @events = Event.history_titles(current_attendee.id)
+     @events = Event.calender_titles(current_attendee.id)
      @events1 = Event.calender_sdate(current_attendee.id)
      @events2 = Event.calender_edate(current_attendee.id)
     view = []
@@ -178,7 +179,7 @@ class EventsController < ApplicationController
         view[i] = {title: @events[i] , start: @events1[i] , end: @events2[i]}
         i+=1
      end
-    render json: view.take(10)
+    render json: view
   else
     render json: @events.errors, status: :unprocessable_entity
   end
