@@ -32,7 +32,7 @@ class AttendeesController < ApplicationController
     if @attendee.update(attendee_params)
       render json: @attendee, status: :ok, location: @attendee
     else
-      render json: @attendee.errors, status: :unprocessable_entity
+      render json: @attendee.errors.full_messages, status: :unprocessable_entity
     end
   end
 

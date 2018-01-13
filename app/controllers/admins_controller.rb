@@ -22,7 +22,7 @@ class AdminsController < ApplicationController
       # Invoke send email confirmation email method here - email includes admin.confirmation_token
       render json: @admin, status: :created, location: @admin
     else
-      render json: @admin.errors, status: :unprocessable_entity
+      render json: @admin.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -31,7 +31,7 @@ class AdminsController < ApplicationController
     if @admin.update(admin_params)
       render json: @admin, status: :ok, location: @attendee
     else
-      render json: @admin.errors, status: :unprocessable_entity
+      render json: @admin.errors.full_messages, status: :unprocessable_entity
     end
   end
 

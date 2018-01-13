@@ -20,7 +20,7 @@ class TypesController < ApplicationController
     if @type.save
       render json: @type, status: :created
     else
-      render json: @type.errors, status: :unprocessable_entity
+      render json: @type.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -29,7 +29,7 @@ class TypesController < ApplicationController
     if @type.update(type_params)
       render json: @type
     else
-      render json: @type.errors, status: :unprocessable_entity
+      render json: @type.errors.full_messages, status: :unprocessable_entity
     end
   end
 
