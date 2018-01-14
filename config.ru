@@ -2,7 +2,7 @@
 
 require_relative 'config/environment'
 
-require ::File.expand_path('../config/environment',  __FILE__)
-use Rack::Static, :urls => ['/carrierwave'], :root => 'tmp' # adding this line
+# require ::File.expand_path('../config/environment',  __FILE__)
+# use Rack::Static, :urls => ['/carrierwave'], :root => 'tmp' # adding this line
 
 run Rails.application
