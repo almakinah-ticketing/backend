@@ -36,6 +36,7 @@ gem 'stripe'
 gem 'rack-cors', :require => 'rack/cors'
 
 gem 'carrierwave', '~> 0.10.0'
+gem 'fog-aws'
 gem 'mini_magick', '~> 4.3'
 gem "letter_opener", :group => :development
 
