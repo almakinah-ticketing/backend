@@ -33,7 +33,11 @@ class ApplicationController < ActionController::API
   end
 
   def current_attendee
-    @current_attendee ||= Attendee.find(payload[:attendee_id])
+    if token && payload
+      @current_attendee ||= Attendee.find(payload[:attendee_id])
+    else
+      nil
+    end
   rescue ActiveRecord::RecordNotFound
     nil
   end

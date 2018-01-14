@@ -55,6 +55,8 @@ class EventsController < ApplicationController
     category = @event.get_category
     if current_attendee
       current_attendee_tickets = @event.tickets.where(attendee_id: current_attendee.id).count
+    else 
+      current_attendee_tickets = 0
     end
     display = {
       tickets_available_per_event: available,
@@ -69,7 +71,6 @@ class EventsController < ApplicationController
     render json: display
   end
 
- 
   
   # #events sorted according to hottest status
   # def hottest
