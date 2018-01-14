@@ -4,7 +4,7 @@ class AdminMailer < ApplicationMailer
     @token = invitation_token
     @message = message
 
-    mail from: 'info@facebook.com', to: email, subject: 'Welcome to AlMakinah'
+    mail from: 'lara.aasem@aucegypt.edu', to: email, subject: 'Welcome to AlMakinah'
   end
 
 end
