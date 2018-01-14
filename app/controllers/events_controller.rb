@@ -53,11 +53,15 @@ class EventsController < ApplicationController
     revenues_per_month = @event.revenues_per_month
     available = @event.tickets_available
     category = @event.get_category
+    if current_attendee
+      current_attendee_tickets = @event.tickets.where(attendee_id: current_attendee.id).count
+    end
     display = {
       tickets_available_per_event: available,
       tickets_sold: count,
       tickets_sold_per_month: count_per_month,
       revenues_per_month: revenues_per_month,
+      current_attendee_tickets: current_attendee_tickets,
       data:@event.as_json(include: {types: {only: [:id, :name, :capacity, :price], methods: [:tickets_available_per_type, :tickets_sold_per_type, :tickets_sold_per_type_per_month, :revenues_per_type_per_month]}, category: {only: [:id, :name]}},
                                           except: [:category_id]
                                           )
