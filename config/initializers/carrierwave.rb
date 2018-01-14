@@ -11,5 +11,5 @@ CarrierWave.configure do |config|
   config.fog_directory  = 'almakinah-summit'                        # required
   config.fog_public     = false                                   # optional, defaults to true
   config.fog_attributes = {'Cache-Control'=>'max-age=315576000'}  # optional, defaults to {}
-  config.fog_host = "http://assets.almakinah-summit-backend.herokuapp.com/almakinah-summit";
+  # config.asset_host = "http://assets.almakinah-summit-backend.herokuapp.com/almakinah-summit";
 end
