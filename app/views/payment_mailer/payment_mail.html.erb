@@ -4,5 +4,5 @@
   hi, you are successfuly booked in <%= @event.title %> Event.
 </p>
 <p>
- Please kindly check <%= link_to 'Your Calendar', "http://localhost:3001/calendar" %>
+ Please kindly check <%= link_to 'Your Calendar', "#{Rails.application.config.frontend_url}/calendar" %>
 </p>

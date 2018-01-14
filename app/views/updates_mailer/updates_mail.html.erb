@@ -5,5 +5,5 @@
 </p>
 <p><%= @event.title %> was updated.</p>
 <p>
-  <%= link_to 'Event Link', "http://localhost:3001/events/#{@event.id}" %>
+  <%= link_to 'Event Link', "#{Rails.application.config.frontend_url}/events/#{@event.id}" %>
 </p>
