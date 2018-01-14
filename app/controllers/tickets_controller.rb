@@ -19,10 +19,10 @@ class TicketsController < ApplicationController
       if @ticket.save
         render json: @ticket, status: :created
       else
-        render json: @ticket.errors, status: :unprocessable_entity
+        render json: @ticket.errors.full_messages, status: :unprocessable_entity
       end
     else
-      render json: @ticket.errors, status: :unprocessable_entity
+      render json: @ticket.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -31,7 +31,7 @@ class TicketsController < ApplicationController
     if @ticket.update(ticket_params)
       render json: @ticket
     else
-      render json: @ticket.errors, status: :unprocessable_entity
+      render json: @ticket.errors.full_messages, status: :unprocessable_entity
     end
   end
 

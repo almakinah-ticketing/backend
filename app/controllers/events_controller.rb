@@ -98,7 +98,7 @@ class EventsController < ApplicationController
     revenues_per_month = @event.revenues_per_month
     available = @event.tickets_available
     category = @event.get_category
-    if @event.save!
+    if @event.save
       display = {
         tickets_available_per_event: available,
         tickets_sold: count,
@@ -110,7 +110,7 @@ class EventsController < ApplicationController
       }
       render json: display, status: :created, location: @event
     else
-      render json: @event.errors, status: :unprocessable_entity
+      render json: @event.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -120,7 +120,7 @@ class EventsController < ApplicationController
     if params[:event][:types_attributes]
       cloned_params[:types_attributes] = JSON.parse(params[:event][:types_attributes])
     end
-    if @event.update!(cloned_params)
+    if @event.update(cloned_params)
       count = @event.tickets_count
       count_per_month = @event.tickets_count_per_month
       revenues_per_month = @event.revenues_per_month
@@ -137,7 +137,7 @@ class EventsController < ApplicationController
       }
       render json: display, status: :ok, location: @event
     else
-      render json: @event.errors, status: :unprocessable_entity
+      render json: @event.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -164,7 +164,7 @@ class EventsController < ApplicationController
 
       render json: view
     else
-      render json: @events.errors, status: :unprocessable_entity
+      render json: @events.errors.full_messages, status: :unprocessable_entity
     end
   end
   def calendar

@@ -32,7 +32,7 @@ class AttendeesController < ApplicationController
     if @attendee.update(attendee_params)
       render json: @attendee, status: :ok, location: @attendee
     else
-      render json: @attendee.errors, status: :unprocessable_entity
+      render json: @attendee.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -60,21 +60,19 @@ class AttendeesController < ApplicationController
   def login
     @attendee = Attendee.find_by(email: params[:email].to_s.downcase)
 
-    @attendee_ticket_objects = @attendee.tickets.to_a
-    @attendee_ticket_hashes = []
-    @attendee_ticket_objects.each do |ticket|
-      @attendee_ticket_hashes << ticket.attributes
-    end
-
-    @attendee_hash = {
+    if @attendee && @attendee.authenticate(params[:password])
+      @attendee_ticket_objects = @attendee.tickets.to_a
+      @attendee_ticket_hashes = []
+      @attendee_ticket_objects.each do |ticket|
+        @attendee_ticket_hashes << ticket.attributes
+      end
+      @attendee_hash = {
           attendee_id: @attendee.id,
           f_name: @attendee.f_name,
           l_name: @attendee.l_name,
           email: @attendee.email,
           tickets_bought: @attendee_ticket_hashes
         }
-
-    if @attendee && @attendee.authenticate(params[:password])
       # if @attendee.confirmed_at?
         auth_token = JsonWebToken.encode(@attendee_hash)
         render json: {auth_token: auth_token}, status: :ok

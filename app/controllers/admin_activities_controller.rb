@@ -15,7 +15,7 @@ class AdminActivitiesController < ApplicationController
       @admin_activities = AdminActivity.all
       render json: @admin_activities, status: :created
     else
-      render json: @admin_activity.errors, status: :unprocessable_entity
+      render json: @admin_activity.errors.full_messages, status: :unprocessable_entity
     end
   end
 
