@@ -6,7 +6,7 @@ CarrierWave.configure do |config|
     :provider               => 'AWS',                        # required
     :aws_access_key_id      => ENV['AWS_ACCESS_KEY_ID'],                        # required
     :aws_secret_access_key  => ENV['AWS_SECRET_ACCESS_KEY'],                     # required
-    :region                 => 'eu-frankfurt'                  # optional, defaults to 'us-east-1'
+    :region                 => 'eu-central-1'                  # optional, defaults to 'us-east-1'
   }
   config.fog_directory  = 'directory'                        # required
   config.fog_public     = false                                   # optional, defaults to true
