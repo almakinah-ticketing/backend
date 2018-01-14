@@ -34,12 +34,16 @@ class Event < ApplicationRecord
 #  end
   # sold tickets count
 
+  # def send_delete_emaild
+  #   self.attendees.distinct.each do |attendee|
+  #     DeleteEventMailer.delete_mail(attendee.email, self).deliver_now
+  # end
+
   def send_emails
-    self.attendees.each do |attendee|
+    self.attendees.distinct.each do |attendee|
       UpdatesMailer.updates_mail(attendee.email, self).deliver_now
     end
   end
-
   def set_event_date
     self.event_date = self.start_datetime.to_date unless self.start_datetime.nil?
   end

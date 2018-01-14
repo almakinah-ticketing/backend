@@ -1,0 +1,9 @@
+<h1>Welcome</h1>
+
+<p>
+  hi, We are so sorry but the Event you've booked was canceled.
+</p>
+<p><%= @event.title %>  was canceled.</p>
+<p>
+  <%= link_to 'Event Link', "#{Rails.application.config.frontend_url}/events/#{@event.id}" %>
+</p>
