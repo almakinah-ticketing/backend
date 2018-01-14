@@ -11,7 +11,7 @@ Admin.create({
         f_name: "Bahia",
         l_name: "El Sharkawy",
         email: "bahia@almakinah.com",
-        phone_number: "012345678910",
+        phone_number: "01234567891",
         password:"123456789"
     })
 

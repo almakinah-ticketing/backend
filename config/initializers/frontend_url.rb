@@ -1,0 +1,1 @@
+Rails.application.config.frontend_url = Rails.env.production? ? 'https://almakinah-summit.herokuapp.com' : 'http://localhost:3001'

@@ -3,5 +3,5 @@
 <p>
 You've been invited to join AlMakinah Summit as an admin! Click the link below to finish your registration: <br/>
 <%= @message %>
-<%= link_to 'Finish Registration', "http://localhost:3001/newadmin?invitation_token=#{@token}" %>
+<%= link_to 'Finish Registration', "#{Rails.application.config.frontend_url}/newadmin?invitation_token=#{@token}" %>
 </p>
