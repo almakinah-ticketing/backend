@@ -157,12 +157,13 @@ class EventsController < ApplicationController
       @type = Type.history_price(current_attendee.id).reverse
       @ticket = Ticket.history_charge(current_attendee.id).reverse
       @type1 = Type.history_type(current_attendee.id).reverse
+      @tickets = Ticket.history_id(current_attendee.id).reverse
       view = []
       size = @events.length
       i = 0
       while i< size do
         # view[i] = @events[i] + " for the price of " + @type[i].to_s + " EGP"
-        view[i] = [event: @events[i] , price: @type[i] , charge: @ticket[i], type: @type1[i]]
+        view[i] = [event: @events[i] , price: @type[i] , charge: @ticket[i], type: @type1[i], id:@tickets[i]]
         i+=1
      end
 

@@ -39,6 +39,7 @@ Rails.application.routes.draw do
   get '/prices', :to => 'types#history'
   post '/refund', :to => 'charges#refund'
   get '/calendar', :to => 'events#calendar'
+  delete '/refunded' , :to => 'tickets#destroy'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
