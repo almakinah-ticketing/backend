@@ -44,6 +44,7 @@ class Event < ApplicationRecord
       UpdatesMailer.updates_mail(attendee.email, self).deliver_now
     end
   end
+  
   def set_event_date
     self.event_date = self.start_datetime.to_date unless self.start_datetime.nil?
   end
