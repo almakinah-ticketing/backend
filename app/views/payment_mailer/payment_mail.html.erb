@@ -1,8 +1,10 @@
-<h1>Welcome</h1>
+<p>Dear <%= @attendee.f_name %>,</p>
 
-<p>
-  hi, you are successfuly booked in <%= @event.title %> Event.
-</p>
-<p>
- Please kindly check <%= link_to 'Your Calendar', "#{Rails.application.config.frontend_url}/calendar" %>
-</p>
+<br />
+
+<p>You have successfully booked <%= @num_tickets %> tickets to <%= @event.title %>. Please check <%= link_to 'your calendar', "#{Rails.application.config.frontend_url}/calendar" %> and <%= link_to 'ticket purchase history', "#{Rails.application.config.frontend_url}/history" %> for more details.</p>
+
+<br />
+
+<p>Best,</p>
+<p>AlMakinah Team</p>

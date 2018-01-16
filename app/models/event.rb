@@ -41,10 +41,10 @@ class Event < ApplicationRecord
 
   def send_emails
     self.attendees.distinct.each do |attendee|
-      UpdatesMailer.updates_mail(attendee.email, self).deliver_now
+      UpdatesMailer.updates_mail(attendee, self).deliver_now
     end
   end
-  
+
   def set_event_date
     self.event_date = self.start_datetime.to_date unless self.start_datetime.nil?
   end

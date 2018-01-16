@@ -1,6 +1,7 @@
 class UpdatesMailer < ApplicationMailer
-  def updates_mail(attendee_email, event)
+  def updates_mail(attendee, event)
     @event = event
-    mail from: 'almakinahsummit@gmail.com', to: attendee_email, subject: 'Updates'
+    @attendee = attendee
+    mail from: 'almakinahsummit@gmail.com', to: attendee.email, subject: "Updates to #{event.title}"
   end
 end
