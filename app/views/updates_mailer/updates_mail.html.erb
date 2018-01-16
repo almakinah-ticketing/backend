@@ -1,7 +1,5 @@
 <p>Dear <%= @attendee.f_name %>,</p>
 
-<br />
-
 <p>We've made some changes to <%= @event.title %> which you're attending. Please check the <%= link_to 'event page', "#{Rails.application.config.frontend_url}/events/#{@event.id}" %> to see the latest event details.</p>
 
 <p>Best,</p>
