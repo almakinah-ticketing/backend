@@ -1,7 +1,16 @@
 <h1>Welcome!</h1>
 
-<p>
-You've been invited to join AlMakinah Summit as an admin! Click the link below to finish your registration: <br/>
-<%= @message %>
-<%= link_to 'Finish Registration', "#{Rails.application.config.frontend_url}/newadmin?invitation_token=#{@token}" %>
-</p>
+<p>You've been invited to join AlMakinah Summit as an admin with the following message:</p>
+
+<br />
+
+<p>"<%= @message %>"</p>
+
+<br />
+
+<p>Click <%= link_to 'here', "#{Rails.application.config.frontend_url}/newadmin?invitation_token=#{@token}" %> to finish your registration.</p>
+
+<br />
+
+<p>Best,</p>
+<p>AlMakinah Team</p>

@@ -1,6 +1,8 @@
 class PaymentMailer < ApplicationMailer
-  def payment_mail(attendee_email, event)
+  def payment_mail(attendee, event, num_tickets)
     @event = event
-    mail from: 'almakinahsummit@gmail.com', to: attendee_email, subject:'Payment'
+    @attendee = attendee
+    @num_tickets = num_tickets
+    mail from: 'almakinahsummit@gmail.com', to: attendee.email, subject: "Booking Confirmation for #{event.title}"
   end
 end

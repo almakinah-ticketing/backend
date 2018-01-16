@@ -1,9 +1,8 @@
-<h1>Welcome</h1>
+<p>Dear <%= @attendee.f_name %>,</p>
 
-<p>
-  hi, The Event you've booked is updated.
-</p>
-<p><%= @event.title %> was updated.</p>
-<p>
-  <%= link_to 'Event Link', "#{Rails.application.config.frontend_url}/events/#{@event.id}" %>
-</p>
+<br />
+
+<p>We've made some changes to <%= @event.title %> which you're attending. Please check the <%= link_to 'event page', "#{Rails.application.config.frontend_url}/events/#{@event.id}" %> to see the latest event details.</p>
+
+<p>Best,</p>
+<p>AlMakinah Team</p>
