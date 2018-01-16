@@ -8,9 +8,7 @@
 
 <br />
 
-<p>Click the link below to finish your registration: <br/>
-<%= link_to 'Finish Registration', "#{Rails.application.config.frontend_url}/newadmin?invitation_token=#{@token}" %>
-</p>
+<p>Click <%= link_to 'here', "#{Rails.application.config.frontend_url}/newadmin?invitation_token=#{@token}" %> to finish your registration.</p>
 
 <br />
 
