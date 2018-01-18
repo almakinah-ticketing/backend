@@ -9,8 +9,6 @@ class Event < ApplicationRecord
 
   accepts_nested_attributes_for :types, allow_destroy: true
 
-  accepts_nested_attributes_for :types
-
   validates :title, presence: true, uniqueness: true, length: {minimum: 1, maximum: 280}
   validates :overview, presence: true, length: {minimum: 1, maximum: 500}
   validates :agenda, presence: true, length: {minimum: 1, maximum: 5000}
